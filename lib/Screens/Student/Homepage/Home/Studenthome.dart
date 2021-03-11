@@ -99,9 +99,10 @@ class _StudentHomeState extends State<StudentHome> {
           scrollDirection: Axis.vertical,
           children: [
             Text(
-              "Get the best career suggestions with \nour experts' guidance!",
+              "Get the best career suggestions with our experts' guidance!",
+              maxLines: 2,
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 19,
                 fontWeight: FontWeight.bold,
                 color: primaryColor,
               ),

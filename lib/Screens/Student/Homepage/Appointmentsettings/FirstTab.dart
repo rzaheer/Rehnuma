@@ -126,7 +126,7 @@ class Scheduledappointments extends StatelessWidget {
                     ),
                     SizedBox(
                       height: 30,
-                      width: 115,
+                      width: size.width / 2.5,
                       child: RaisedButton(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15)),
