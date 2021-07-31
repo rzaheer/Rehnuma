@@ -3,6 +3,8 @@ import 'package:finalyearproject/CustomWidgets/Custombottombar.dart';
 import 'package:finalyearproject/Global.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Home/DoctorDetails.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Home/DoctorsList.dart';
+import 'package:finalyearproject/services/auth.dart';
+import 'package:finalyearproject/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -43,6 +45,18 @@ class _StudentHomeState extends State<StudentHome> {
               Icons.settings,
               color: primaryColor,
               size: 27,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 20),
+            child: IconButton(
+              onPressed: () {
+                AuthService().signOut(context);
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => Wrapper()),
+                    (Route<dynamic> route) => false);
+              },
+              icon: Icon(Icons.star),
             ),
           )
         ],

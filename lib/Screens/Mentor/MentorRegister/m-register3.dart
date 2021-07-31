@@ -1,34 +1,27 @@
 import 'package:finalyearproject/CustomWidgets/Custombutton.dart';
 import 'package:finalyearproject/Global.dart';
-
-import 'package:finalyearproject/Screens/Student/StudentRegister/StudentRegister5.dart';
-import 'package:finalyearproject/models/Registermodel.dart';
+import 'package:finalyearproject/Screens/Mentor/MentorRegister/m-register5.dart';
+import 'package:finalyearproject/Screens/Student/StudentRegister/StudentRegister3.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class StudentRegister2 extends StatefulWidget {
-  final StudentModel studentModel;
-  StudentRegister2({this.studentModel});
+class MentorRegister3 extends StatefulWidget {
   @override
-  _StudentRegister2State createState() => _StudentRegister2State();
+  _MentorRegister3State createState() => _MentorRegister3State();
 }
 
-class _StudentRegister2State extends State<StudentRegister2> {
+class _MentorRegister3State extends State<MentorRegister3> {
   TextEditingController dobController = TextEditingController();
-  StudentModel currStudentModel;
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    currStudentModel = widget.studentModel;
-  }
+  final format = DateFormat("dd-MM-yyyy");
+  DateTime selectedDate = DateTime.now();
+  bool maleSelected = true, femaleSelected = false, otherSelected = false;
+  int gender = 2; //1 for female , 2 for male , 3 for other
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
       body: Container(
-          padding: EdgeInsets.all(10),
           width: size.width,
           height: size.height,
           color: primaryColor,
@@ -42,7 +35,7 @@ class _StudentRegister2State extends State<StudentRegister2> {
                 Padding(
                   padding: const EdgeInsets.only(left: 30),
                   child: Text(
-                    'How can we contact  \nyou?',
+                    'Choose a password for   \nyour account',
                     style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.normal,
@@ -53,60 +46,56 @@ class _StudentRegister2State extends State<StudentRegister2> {
                 SizedBox(
                   height: 40,
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 30),
+                  child: Text('New Password',
+                      style: TextStyle(
+                        color: textColor,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                      )),
+                ),
                 Center(
                   child: SizedBox(
                     height: 45,
                     width: size.width / 1.2,
                     child: TextField(
+                      style: TextStyle(fontSize: 16, color: inputTextColor),
                       decoration: InputDecoration(
-                        hintText: 'Email',
-                        hintStyle: TextStyle(
-                          color: secondaryColor,
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: inputTextColor, width: 1),
                         ),
-                        focusColor: secondaryColor,
-                        fillColor: Colors.white30,
                         filled: true,
+                        fillColor: secondaryColor,
+                        hintText: '********',
                       ),
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 20,
+                SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.only(left: 30),
+                  child: Text('Confirm Password',
+                      style: TextStyle(
+                        color: textColor,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                      )),
                 ),
                 Center(
                   child: SizedBox(
                     height: 45,
                     width: size.width / 1.2,
-                    child: Row(children: [
-                      SizedBox(
-                        width: 50,
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            hintText: '+92',
-                            hintStyle: TextStyle(
-                              color: secondaryColor,
-                            ),
-                            focusColor: secondaryColor,
-                            fillColor: Colors.white30,
-                            filled: true,
-                          ),
-                        ),
+                    child: TextField(
+                      obscureText: true,
+                      style: TextStyle(fontSize: 16, color: inputTextColor),
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: secondaryColor,
+                        hintText: '*********',
                       ),
-                      SizedBox(width: 10),
-                      Expanded(
-                        child: TextField(
-                          decoration: InputDecoration(
-                            hintText: 'Phone Number',
-                            hintStyle: TextStyle(
-                              color: secondaryColor,
-                            ),
-                            focusColor: secondaryColor,
-                            fillColor: Colors.white30,
-                            filled: true,
-                          ),
-                        ),
-                      ),
-                    ]),
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -121,7 +110,7 @@ class _StudentRegister2State extends State<StudentRegister2> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => StudentRegister5()));
+                              builder: (context) => MentorRegister5()));
                     },
                     title: 'NEXT',
                   ),

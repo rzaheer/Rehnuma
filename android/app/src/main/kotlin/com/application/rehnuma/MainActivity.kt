@@ -1,4 +1,4 @@
-package com.example.finalyearproject
+package com.application.rehnuma
 
 import io.flutter.embedding.android.FlutterActivity
 

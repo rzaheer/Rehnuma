@@ -9,4 +9,9 @@ final Color highlightColor = Color(0xFF088185);
 final Color inputTextColor = Color(0xFF024D61);
 final Color buttonColor = Color(0xFFCB1C1C);
 
+Size size(BuildContext context) {
+  Size size = MediaQuery.of(context).size;
+  return size;
+}
+
 //Color(0xFF#56E3E8),

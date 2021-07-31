@@ -1,19 +1,16 @@
 import 'package:finalyearproject/CustomWidgets/Custombutton.dart';
-import 'package:finalyearproject/CustomWidgets/Customtoast.dart';
 import 'package:finalyearproject/Global.dart';
+import 'package:finalyearproject/Screens/Mentor/mlogin/mlogin.dart';
 import 'package:finalyearproject/Screens/Student/Login/Login.dart';
-import 'package:finalyearproject/models/Registermodel.dart';
-import 'package:finalyearproject/services/auth.dart';
-import 'package:finalyearproject/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class StudentRegister4 extends StatefulWidget {
+class MentorRegister4 extends StatefulWidget {
   @override
-  _StudentRegister4State createState() => _StudentRegister4State();
+  _MentorRegister4State createState() => _MentorRegister4State();
 }
 
-class _StudentRegister4State extends State<StudentRegister4> {
+class _MentorRegister4State extends State<MentorRegister4> {
   int selectedIndex;
   final tags = [
     'Engineering',
@@ -156,31 +153,11 @@ class _StudentRegister4State extends State<StudentRegister4> {
                       buttoncolor: buttonColor,
                       height: 50,
                       width: size.width / 2,
-                      onPressed: () async {
-                        StudentModel reg1 = StudentModel(
-                            dob: "3-07-1999",
-                            email: "zahee123r@gmail.com",
-                            firstname: "Zaheer",
-                            gender: "male",
-                            lastname: "Z",
-                            password: "123456",
-                            phone: "000");
-                        await AuthService()
-                            .registerWithEmailAndPassword(reg1, context)
-                            .then((value) {
-                          if (value == true) {
-                            Navigator.of(context).pushAndRemoveUntil(
-                                MaterialPageRoute(
-                                    builder: (context) => Wrapper()),
-                                (Route<dynamic> route) => false);
-                          } else {
-                            CustomToast().showerrorToast("Failed");
-                          }
-                        });
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) => StudentLogin()));
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MentorLogin()));
                       },
                       title: 'DONE',
                     ),

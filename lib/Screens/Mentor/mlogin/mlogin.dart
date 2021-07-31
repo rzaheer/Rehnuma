@@ -1,16 +1,17 @@
 import 'package:finalyearproject/Global.dart';
+import 'package:finalyearproject/Screens/Mentor/MentorHome/mentorhome.dart';
+import 'package:finalyearproject/Screens/Mentor/MentorRegister/m-register1.dart';
 import 'package:finalyearproject/Screens/Student/ForgotPassword/Forgotpassword1.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Home/Studenthome.dart';
 import 'package:finalyearproject/Screens/Student/StudentRegister/StudentRegister1.dart';
-import 'package:finalyearproject/services/DBuser.dart';
 import 'package:flutter/material.dart';
 
-class StudentLogin extends StatefulWidget {
+class MentorLogin extends StatefulWidget {
   @override
-  _StudentLoginState createState() => _StudentLoginState();
+  _MentorLoginState createState() => _MentorLoginState();
 }
 
-class _StudentLoginState extends State<StudentLogin> {
+class _MentorLoginState extends State<MentorLogin> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -27,9 +28,6 @@ class _StudentLoginState extends State<StudentLogin> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(height: 10),
-                /*  RaisedButton(onPressed: () {
-                  DBuser().setData();
-                }), */
                 Center(
                   child: Text(
                     'LOGIN',
@@ -107,7 +105,7 @@ class _StudentLoginState extends State<StudentLogin> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => StudentHome()));
+                                  builder: (context) => MentorHome()));
                         },
                         child: Text(
                           'LOGIN',
@@ -238,7 +236,7 @@ class _StudentLoginState extends State<StudentLogin> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => StudentRegister()));
+                                builder: (context) => MentorRegister1()));
                       },
                       child: Text.rich(
                         TextSpan(

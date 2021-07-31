@@ -1,27 +1,19 @@
 import 'package:finalyearproject/CustomWidgets/Custombutton.dart';
 import 'package:finalyearproject/Global.dart';
+import 'package:finalyearproject/Screens/Mentor/MentorRegister/m-register3.dart';
 
 import 'package:finalyearproject/Screens/Student/StudentRegister/StudentRegister5.dart';
-import 'package:finalyearproject/models/Registermodel.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class StudentRegister2 extends StatefulWidget {
-  final StudentModel studentModel;
-  StudentRegister2({this.studentModel});
+class MentorRegister2 extends StatefulWidget {
   @override
-  _StudentRegister2State createState() => _StudentRegister2State();
+  _MentorRegister2State createState() => _MentorRegister2State();
 }
 
-class _StudentRegister2State extends State<StudentRegister2> {
-  TextEditingController dobController = TextEditingController();
-  StudentModel currStudentModel;
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    currStudentModel = widget.studentModel;
-  }
+class _MentorRegister2State extends State<MentorRegister2> {
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +50,7 @@ class _StudentRegister2State extends State<StudentRegister2> {
                     height: 45,
                     width: size.width / 1.2,
                     child: TextField(
+                      controller: emailController,
                       decoration: InputDecoration(
                         hintText: 'Email',
                         hintStyle: TextStyle(
@@ -80,7 +73,7 @@ class _StudentRegister2State extends State<StudentRegister2> {
                     child: Row(children: [
                       SizedBox(
                         width: 50,
-                        child: TextFormField(
+                        child: TextField(
                           decoration: InputDecoration(
                             hintText: '+92',
                             hintStyle: TextStyle(
@@ -95,6 +88,7 @@ class _StudentRegister2State extends State<StudentRegister2> {
                       SizedBox(width: 10),
                       Expanded(
                         child: TextField(
+                          controller: phoneController,
                           decoration: InputDecoration(
                             hintText: 'Phone Number',
                             hintStyle: TextStyle(
@@ -121,7 +115,7 @@ class _StudentRegister2State extends State<StudentRegister2> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => StudentRegister5()));
+                              builder: (context) => MentorRegister3()));
                     },
                     title: 'NEXT',
                   ),
