@@ -1,8 +1,7 @@
 import 'package:finalyearproject/Screens/Splashscreen/Accountselection.dart';
-import 'package:finalyearproject/Screens/Student/Homepage/Home/Studenthome.dart';
-import 'package:finalyearproject/Screens/Student/Login/Login.dart';
+import 'package:finalyearproject/Screens/Student/Homepage/Home/Studenthome.dart'
+    show StudentHome;
 import 'package:finalyearproject/models/user.dart';
-import 'package:finalyearproject/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

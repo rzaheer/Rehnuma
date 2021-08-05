@@ -3,6 +3,7 @@ import 'package:finalyearproject/CustomWidgets/Custombottombar.dart';
 import 'package:finalyearproject/Global.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Home/DoctorDetails.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Home/DoctorsList.dart';
+import 'package:finalyearproject/Screens/Student/Homepage/Home/DrawerItems/Notifications.dart';
 import 'package:finalyearproject/services/auth.dart';
 import 'package:finalyearproject/wrapper.dart';
 import 'package:flutter/material.dart';
@@ -61,48 +62,73 @@ class _StudentHomeState extends State<StudentHome> {
           )
         ],
       ),
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            UserAccountsDrawerHeader(
+              accountName: Text(
+                "Ramsha Zaheer",
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+              ),
+              accountEmail: Text("ramshazaheer@gmail.com"),
+              currentAccountPicture: CircleAvatar(
+                backgroundColor:
+                    Theme.of(context).platform == TargetPlatform.android
+                        ? secondaryColor
+                        : primaryColor,
+                child: Text(
+                  "R",
+                  style: TextStyle(fontSize: 40.0),
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('Notifications'),
+              onTap: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => Notifications()));
+              },
+            ),
+            ListTile(
+              leading: FaIcon(FontAwesomeIcons.themeco),
+              title: Text('App Theme'),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: FaIcon(FontAwesomeIcons.envelopeOpen),
+              title: Text('Invite Friends'),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: Icon(Icons.help),
+              title: Text('Help'),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: FaIcon(
+                FontAwesomeIcons.question,
+              ),
+              title: Text('FAQs'),
+              onTap: () {
+                /* Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => FAQs())); */
+              },
+            ),
+            ListTile(
+              leading: FaIcon(
+                FontAwesomeIcons.signOutAlt,
+              ),
+              title: Text('Log out'),
+              onTap: () {},
+            ),
+          ],
+        ),
+      ),
       drawerEnableOpenDragGesture: true,
       drawerScrimColor: primaryColor,
-      drawer: Drawer(
-        elevation: 8,
-        child: ListView(children: [
-          ListTile(
-            leading: FaIcon(
-              FontAwesomeIcons.bell,
-            ),
-            title: Text('Notifications'),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: FaIcon(
-              FontAwesomeIcons.themeco,
-            ),
-            title: Text('App Theme'),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: FaIcon(
-              FontAwesomeIcons.questionCircle,
-            ),
-            title: Text('Help'),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: FaIcon(
-              FontAwesomeIcons.question,
-            ),
-            title: Text('FAQs'),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: FaIcon(
-              FontAwesomeIcons.bug,
-            ),
-            title: Text('Report a problem'),
-            onTap: () {},
-          ),
-        ]),
-      ),
       bottomNavigationBar: CustomNavbar(index: 0, indashboard: null),
       body: Container(
         color: secondaryColor,
@@ -236,6 +262,20 @@ class _StudentHomeState extends State<StudentHome> {
             ),
             SizedBox(height: 10),
             //Top picks wala
+
+            /*     Firestore.instance.collection('DriverList').snapshots(),
+  builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+    if (!snapshot.hasData) return new Text('Loading...');
+    return new ListView(
+      children: snapshot.data.documents.map((DocumentSnapshot document) {
+        return new ListTile(
+          title: new Text(document['name']),
+          subtitle: new Text(document['phone']),
+        );
+      }).toList(),
+    );
+  },
+); */
             Container(
               height: size.height / 5,
               child: ListView.builder(

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:finalyearproject/Global.dart';
-import 'package:finalyearproject/Screens/Splashscreen/Accountselection.dart';
-import 'package:finalyearproject/wrapper.dart';
+import 'package:finalyearproject/Screens/Student/Login/Login.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -13,8 +12,8 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(Duration(seconds: 5), () {
-      Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (context) => Wrapper()));
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => StudentLogin()));
     });
   }
 

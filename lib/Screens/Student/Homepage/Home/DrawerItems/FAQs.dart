@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../../Global.dart';
+import '../../../../../Global.dart';
 
-class Aboutus extends StatelessWidget {
+class FAQS extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,7 +14,7 @@ class Aboutus extends StatelessWidget {
           color: secondaryColor,
         ), */
         title: Text(
-          'About us',
+          'FAQs',
           style: TextStyle(
               fontSize: 17, color: secondaryColor, fontWeight: FontWeight.bold),
         ),

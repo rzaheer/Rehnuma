@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:finalyearproject/models/Registermodel.dart';
+import 'package:finalyearproject/models/STDRegistermodel.dart';
 
 class DBuser {
   FirebaseFirestore firestore = FirebaseFirestore.instance;

@@ -1,6 +1,4 @@
 import 'package:finalyearproject/Global.dart';
-import 'package:finalyearproject/Screens/Mentor/MentorHome/mentorhome.dart';
-import 'package:finalyearproject/Screens/Mentor/mlogin/mlogin.dart';
 import 'package:finalyearproject/Screens/Student/Login/Login.dart';
 import 'package:flutter/material.dart';
 
@@ -54,8 +52,8 @@ class _AccountSelectionState extends State<AccountSelection> {
                   borderRadius: BorderRadius.circular(20)),
               color: Colors.white60,
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => MentorLogin()));
+                /*  Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => MentorLogin())); */
               },
               child: Center(
                 child: Text(

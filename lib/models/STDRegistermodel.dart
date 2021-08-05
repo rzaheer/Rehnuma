@@ -7,6 +7,8 @@ class StudentModel {
   final String password;
   final String gender;
   final String dob;
+  final String educationlevel;
+  final String fieldOfEducation;
 
   StudentModel({
     this.studentId,
@@ -17,6 +19,8 @@ class StudentModel {
     this.password,
     this.gender,
     this.dob,
+    this.educationlevel,
+    this.fieldOfEducation,
   });
 
   factory StudentModel.fromJson(Map<String, dynamic> json) => StudentModel();

@@ -1,14 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finalyearproject/CustomWidgets/Customtoast.dart';
-import 'package:finalyearproject/models/Registermodel.dart';
+import 'package:finalyearproject/models/STDRegistermodel.dart';
 import 'package:finalyearproject/models/user.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:finalyearproject/services/DBuser.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn googleSignin = new GoogleSignIn();
   final fireStore = FirebaseFirestore.instance;
   final CollectionReference students =
       FirebaseFirestore.instance.collection("Students");
@@ -34,7 +36,7 @@ class AuthService {
     } on FirebaseAuthException catch (error) {
       print("firebase aUTH eXCePTION ayaaaa hai");
       if (error.code == 'user-not-found') {
-        CustomToast().showerrorToast('User not registered');
+        CustomToast().showerrorToast('User not found');
       } else if (error.code == 'wrong-password') {
         CustomToast().showerrorToast('Invalid password');
       } else if (error.code == 'network-request-failed') {
@@ -47,7 +49,7 @@ class AuthService {
       print(error.toString());
       return error.message;
     } on PlatformException catch (error) {
-      print("Platform Exceppppption");
+      print("Platform Exception");
       CustomToast().showerrorToast('Oops, an error has occured');
       print(error.toString());
       return error.message;
@@ -128,11 +130,41 @@ class AuthService {
     }
   }
 
-  GoogleSignInAccount googleUser = await googleSignIn.signIn();
+/*   GoogleSignInAccount googleUser = await googleSignIn.signIn();
 GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 final AuthCredential credential = GoogleAuthProvider.getCredential(
     accessToken: googleAuth.accessToken,
     idToken: googleAuth.idToken,
 );
-FirebaseUser firebaseUser = (await firebaseAuth.signInWithCredential(credential)).user;
+FirebaseUser firebaseUser = (await firebaseAuth.signInWithCredential(credential)).user;*/
+
+//Google Sign in
+  Future gsignIn(StudentModel studentModel, BuildContext context) async {
+    GoogleSignInAccount googleSignInAccount = await googleSignin.signIn();
+    GoogleSignInAuthentication gSA = await googleSignInAccount.authentication;
+    final AuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: gSA.accessToken,
+      idToken: gSA.idToken,
+    );
+    final UserCredential authResult =
+        await _auth.signInWithCredential(credential);
+    final User user = authResult.user;
+    if (authResult.user != null) {
+      User firebaseUser = authResult.user;
+      print(firebaseUser.email);
+
+      print("User Name:${user.email}");
+      return _userFromFirebaseUser(user);
+    } else {
+      print('Sign in failed');
+    }
+  }
+
+  //googleSignout
+  Future gsignOut() async {
+    GoogleSignIn().signOut().whenComplete(() {
+      print('Signed out succesfully');
+    });
+    return await _auth.signOut();
+  }
 }

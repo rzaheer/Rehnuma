@@ -1,6 +1,9 @@
+import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:finalyearproject/CustomWidgets/Custombottombar.dart';
 import 'package:finalyearproject/Global.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Recommender/SearchResult.dart';
+import 'package:finalyearproject/models/UniversityModel.dart';
+import 'package:finalyearproject/services/DBservice.dart';
 import 'package:flutter/material.dart';
 
 class Recommender extends StatefulWidget {
@@ -9,8 +12,34 @@ class Recommender extends StatefulWidget {
 }
 
 class _RecommenderState extends State<Recommender> {
-  TextEditingController searchcontroller = TextEditingController();
+  TextEditingController uniController = TextEditingController();
   String searchName;
+  GlobalKey<AutoCompleteTextFieldState<String>> _autoCompKey = GlobalKey();
+  List<String> allUnis = [];
+  String selectedUni;
+  DBService dbService = DBService();
+  List<UniversityModel> allRecommendedUni = [];
+  UniversityModel allRecUni;
+
+  getAllUniversities() async {
+    await DBService().getAllUni().then((value) {
+      setState(() {
+        allUnis = value;
+      });
+    });
+    /* print("++++++++++++");
+    print(allUnis[0]);
+    print(allUnis.length); */
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    super.initState();
+    getAllUniversities();
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -66,15 +95,78 @@ class _RecommenderState extends State<Recommender> {
                       borderRadius: BorderRadius.circular(20)),
                   elevation: 5,
                   child: Container(
-                    padding: EdgeInsets.only(
-                      left: 20,
-                    ),
                     width: size.width / 1.3,
                     height: 50,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
+                        allUnis.isEmpty
+                            ? Container()
+                            : SizedBox(
+                                height: 50,
+                                width: size.width / 1.9,
+                                child: Material(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8.0)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        15.0, 1.0, 0.0, 1.0),
+                                    child: AutoCompleteTextField<String>(
+                                      controller: uniController,
+                                      textChanged: (v) {
+                                        setState(() {
+                                          // widget.user.country = v.trim();
+                                        });
+                                      },
+                                      style: kInputTextStyle,
+                                      decoration: InputDecoration(
+                                        hintText: 'University name',
+                                        hintStyle: kInputHintTextStyle,
+                                        border: InputBorder.none,
+                                      ),
+                                      suggestions: allUnis.toSet().toList(),
+                                      clearOnSubmit: false,
+                                      itemBuilder: (context, item) {
+                                        return Container(
+                                          padding: EdgeInsets.all(5.0),
+                                          child: Text(
+                                            item,
+                                            style: kInputTextStyle,
+                                          ),
+                                        );
+                                      },
+                                      itemFilter: (item, query) {
+                                        return item
+                                            .toLowerCase()
+                                            .startsWith(query.toLowerCase());
+                                      },
+                                      itemSorter: (a, b) {
+                                        return a.compareTo(b);
+                                      },
+                                      itemSubmitted: (item) async {
+                                        setState(
+                                            () => selectedUni = item.trim());
+                                        print(selectedUni);
+                                        await dbService
+                                            .getData(selectedUni)
+                                            .then((value) {
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      SearchResults(
+                                                          uniList: value)));
+                                          setState(() {
+                                            allRecommendedUni = value;
+                                          });
+                                        });
+                                        print(allRecommendedUni);
+                                      },
+                                      key: _autoCompKey,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                        /* Container(
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.only(
                                   topRight: Radius.circular(20),
@@ -109,14 +201,14 @@ class _RecommenderState extends State<Recommender> {
                             //   }
                             // },
                           ),
-                        ),
+                        ), */
                         Container(
                           width: 60,
                           height: 50,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(20),
-                                bottomRight: Radius.circular(20)),
+                                topRight: Radius.circular(8),
+                                bottomRight: Radius.circular(8)),
                             color: buttonColor,
                           ),
                           child: IconButton(
@@ -127,10 +219,14 @@ class _RecommenderState extends State<Recommender> {
                                 size: 25,
                               ),
                               onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => SearchResults()));
+                                if (allRecommendedUni != null) {
+                                  print(allRecommendedUni.length);
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              SearchResults()));
+                                }
                               }),
                         )
                       ],

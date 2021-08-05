@@ -1,9 +1,17 @@
 import 'package:finalyearproject/CustomWidgets/Custombottombar.dart';
 import 'package:finalyearproject/Global.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Recommender/universitydetails.dart';
+import 'package:finalyearproject/models/UniversityModel.dart';
 import 'package:flutter/material.dart';
 
-class SearchResults extends StatelessWidget {
+class SearchResults extends StatefulWidget {
+  final List<UniversityModel> uniList;
+  SearchResults({this.uniList});
+  @override
+  _SearchResultsState createState() => _SearchResultsState();
+}
+
+class _SearchResultsState extends State<SearchResults> {
   final uniName = [
     "NED University of Engineering and Technology",
     "UBIT - Karachi University ",
@@ -13,6 +21,18 @@ class SearchResults extends StatelessWidget {
     "SZABIST",
     "Iqra University"
   ];
+  List<UniversityModel> univModel = [];
+  UniversityModel univvModel;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (widget.uniList.isEmpty) {
+      print("its null");
+    } else
+      print(widget.uniList.first.university);
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -40,14 +60,14 @@ class SearchResults extends StatelessWidget {
               children: [
                 SizedBox(height: 20),
                 Text(
-                  "Universities like 'NED University'",
+                  "Recommended universities based on your search",
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w800,
                     color: inputTextColor,
                   ),
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 5),
                 Padding(
                   padding: const EdgeInsets.only(left: 200),
                   child: SizedBox(
@@ -84,9 +104,9 @@ class SearchResults extends StatelessWidget {
                     shrinkWrap: true,
                     primary: false,
                     padding: EdgeInsets.all(10),
-                    itemCount: uniName.length,
+                    itemCount: widget.uniList.length,
                     itemBuilder: (context, index) {
-                      final item = uniName[index];
+                      UniversityModel uni = widget.uniList[index];
 
                       return InkWell(
                         focusColor: primaryColor,
@@ -129,7 +149,7 @@ class SearchResults extends StatelessWidget {
                                       SizedBox(
                                         width: size.width / 1.8,
                                         child: Text(
-                                          item,
+                                          uni.university,
                                           maxLines: 2,
                                           style: TextStyle(
                                               fontSize: 15,
@@ -139,7 +159,7 @@ class SearchResults extends StatelessWidget {
                                         ),
                                       ),
                                       Text(
-                                        'Karachi, Pakistan',
+                                        uni.location,
                                         style: TextStyle(
                                           fontSize: 13,
                                           color: buttonColor,
