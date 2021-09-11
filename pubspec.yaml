@@ -47,7 +47,9 @@ dependencies:
   flutter_pw_validator: ^1.0.0
   http: ^0.12.2
   autocomplete_textfield: ^1.7.3
-  
+  pie_chart: ^1.2.0
+  filter_list: ^0.0.7
+  email_auth: ^0.0.1+2
 
 
 

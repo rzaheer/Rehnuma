@@ -1,11 +1,17 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finalyearproject/CustomWidgets/Custombottombar.dart';
 import 'package:finalyearproject/Global.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Home/DoctorDetails.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Home/DoctorsList.dart';
+import 'package:finalyearproject/Screens/Student/Homepage/Home/DrawerItems/FAQs.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Home/DrawerItems/Notifications.dart';
+import 'package:finalyearproject/models/mentorModel.dart';
+
+import 'package:finalyearproject/services/DBservice.dart';
 import 'package:finalyearproject/services/auth.dart';
 import 'package:finalyearproject/wrapper.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -15,6 +21,15 @@ class StudentHome extends StatefulWidget {
 }
 
 class _StudentHomeState extends State<StudentHome> {
+  /*  Stream<Document> snapshot =
+      FirebaseFirestore.instance.collection("Students").doc('').snapshots(); */
+
+  String _uname = ''; //fetch user  full name
+  String _uEmail = ''; //fetch user  full name
+  var mCurrentUser = FirebaseAuth.instance.currentUser;
+  FirebaseAuth _auth;
+  DocumentReference ref;
+
   final counselorname = [
     "Dr. Moosa Khan",
     "Dr. Asim khurram",
@@ -29,6 +44,38 @@ class _StudentHomeState extends State<StudentHome> {
     "Career advisor",
     "Psychologist"
   ];
+  List<MentorModel> mentorList = [];
+
+  getAllMentors() async {
+    await DBService().getMentorsList().then((value) {
+      setState(() {
+        mentorList = value;
+      });
+    });
+    print("++++++++++++");
+    print(mentorList.length);
+    print(mentorList.first);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _auth = FirebaseAuth.instance; //auth iniatited
+    _getCurrentUser(); //get user call
+    getAllMentors();
+  }
+
+  _getCurrentUser() async {
+    mCurrentUser = await _auth.currentUser;
+    DocumentSnapshot item = await FirebaseFirestore.instance
+        .collection("Students")
+        .doc(mCurrentUser.uid)
+        .get();
+
+    setState(() {
+      _uname = item['full name'];
+    });
+  }
 
   TextEditingController searchcontroller = TextEditingController();
   String searchName;
@@ -36,100 +83,6 @@ class _StudentHomeState extends State<StudentHome> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: secondaryColor,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 20),
-            child: Icon(
-              Icons.settings,
-              color: primaryColor,
-              size: 27,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 20),
-            child: IconButton(
-              onPressed: () {
-                AuthService().signOut(context);
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => Wrapper()),
-                    (Route<dynamic> route) => false);
-              },
-              icon: Icon(Icons.star),
-            ),
-          )
-        ],
-      ),
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            UserAccountsDrawerHeader(
-              accountName: Text(
-                "Ramsha Zaheer",
-                style: TextStyle(
-                  fontSize: 20,
-                ),
-              ),
-              accountEmail: Text("ramshazaheer@gmail.com"),
-              currentAccountPicture: CircleAvatar(
-                backgroundColor:
-                    Theme.of(context).platform == TargetPlatform.android
-                        ? secondaryColor
-                        : primaryColor,
-                child: Text(
-                  "R",
-                  style: TextStyle(fontSize: 40.0),
-                ),
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Notifications'),
-              onTap: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => Notifications()));
-              },
-            ),
-            ListTile(
-              leading: FaIcon(FontAwesomeIcons.themeco),
-              title: Text('App Theme'),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: FaIcon(FontAwesomeIcons.envelopeOpen),
-              title: Text('Invite Friends'),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: Icon(Icons.help),
-              title: Text('Help'),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: FaIcon(
-                FontAwesomeIcons.question,
-              ),
-              title: Text('FAQs'),
-              onTap: () {
-                /* Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => FAQs())); */
-              },
-            ),
-            ListTile(
-              leading: FaIcon(
-                FontAwesomeIcons.signOutAlt,
-              ),
-              title: Text('Log out'),
-              onTap: () {},
-            ),
-          ],
-        ),
-      ),
-      drawerEnableOpenDragGesture: true,
-      drawerScrimColor: primaryColor,
-      bottomNavigationBar: CustomNavbar(index: 0, indashboard: null),
       body: Container(
         color: secondaryColor,
         child: ListView(
@@ -148,71 +101,7 @@ class _StudentHomeState extends State<StudentHome> {
               ),
             ),
             SizedBox(height: 10),
-            /* Row(
-              children: [
-                Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  elevation: 8,
-                  child: SizedBox(
-                    width: size.width / 1.4,
-                    height: 35,
-                    child: Row(
-                      children: [
-                        SizedBox(width: 15),
-                        FaIcon(
-                          FontAwesomeIcons.search,
-                          color: primaryColor,
-                          size: 15,
-                        ),
-                        SizedBox(width: 10),
-                        Container(
-                          width: size.width / 2,
-                          child: TextFormField(
-                            controller: searchcontroller,
-                            style:
-                                TextStyle(fontSize: 14, color: buttonTextColor),
 
-                            decoration: InputDecoration(
-                              disabledBorder: InputBorder.none,
-                              enabledBorder: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                              hintText: 'Search',
-                              hintStyle: TextStyle(fontSize: 14),
-                            ),
-                            onFieldSubmitted: (val) {
-                              setState(() {
-                                searchName = val;
-                              });
-                              print(searchName);
-                              //searchDoctor();
-                            },
-                            // onChanged: (val){
-                            //   if(val.isEmpty){
-                            //    fetchDoctors();
-                            //   }
-                            // },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 70,
-                  height: 40,
-                  child: IconButton(
-                    icon: FaIcon(
-                      FontAwesomeIcons.slidersH,
-                      color: primaryColor,
-                      size: 23,
-                    ),
-                    onPressed: () {},
-                  ),
-                ),
-              ],
-            ), */
-            //,,,,,,,,,,,,,,,,,,,,,,
             CarouselSlider(
               items: [
                 //1st Image of Slider
@@ -282,9 +171,9 @@ class _StudentHomeState extends State<StudentHome> {
                   scrollDirection: Axis.horizontal,
                   shrinkWrap: true,
                   primary: false,
-                  itemCount: counselorname.length,
+                  itemCount: mentorList.length,
                   itemBuilder: (context, index) {
-                    final item = counselorname[index];
+                    final item = mentorList[index];
                     return InkWell(
                       onTap: () {
                         Navigator.push(
@@ -316,7 +205,7 @@ class _StudentHomeState extends State<StudentHome> {
                               Container(
                                 height: 50,
                                 child: Text(
-                                  item,
+                                  item.name,
                                   textAlign: TextAlign.center,
                                   maxLines: 2,
                                   style: TextStyle(
@@ -348,10 +237,10 @@ class _StudentHomeState extends State<StudentHome> {
             ListView.builder(
                 primary: false,
                 shrinkWrap: true,
-                itemCount: counselorname.length,
+                itemCount: mentorList.length,
                 scrollDirection: Axis.vertical,
                 itemBuilder: (context, index) {
-                  final professions = profession[index];
+                  final professions = mentorList[index];
                   final details = counselorname[index];
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -394,7 +283,7 @@ class _StudentHomeState extends State<StudentHome> {
                                 ),
                               ),
                               Text(
-                                professions,
+                                "dUMMNY TEXT",
                                 style: TextStyle(
                                   fontSize: 13,
                                   fontStyle: FontStyle.italic,
@@ -492,6 +381,89 @@ class _StudentHomeState extends State<StudentHome> {
           ],
         ),
       ),
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: primaryColor,
+        actions: [
+          /*  Padding(
+            padding: const EdgeInsets.only(right: 20),
+            child: Icon(
+              Icons.settings,
+              color: primaryColor,
+              size: 27,
+            ),
+          ), */
+        ],
+      ),
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            UserAccountsDrawerHeader(
+              accountName: Text(
+                "Ramsha Zaheer",
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+              ),
+              accountEmail: Text(_uEmail),
+              arrowColor: Colors.red,
+              currentAccountPicture: CircleAvatar(
+                backgroundColor:
+                    Theme.of(context).platform == TargetPlatform.android
+                        ? secondaryColor
+                        : primaryColor,
+                child: Text(
+                  "R",
+                  style: TextStyle(fontSize: 40.0),
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('Notifications'),
+              onTap: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => Notifications()));
+              },
+            ),
+            ListTile(
+              leading: FaIcon(FontAwesomeIcons.envelopeOpen),
+              title: Text('Invite Friends'),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: Icon(Icons.help),
+              title: Text('Help'),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: FaIcon(
+                FontAwesomeIcons.question,
+              ),
+              title: Text('FAQs'),
+              onTap: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => FAQS()));
+              },
+            ),
+            ListTile(
+              leading: FaIcon(
+                FontAwesomeIcons.signOutAlt,
+              ),
+              title: Text('Log out'),
+              onTap: () {
+                AuthService().signOut(context);
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => Wrapper()),
+                    (Route<dynamic> route) => false);
+              },
+            ),
+          ],
+        ),
+      ),
+      drawerEnableOpenDragGesture: true,
+      drawerScrimColor: primaryColor,
+      bottomNavigationBar: CustomNavbar(index: 0, indashboard: null),
     );
   }
 }

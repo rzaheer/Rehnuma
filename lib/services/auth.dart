@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finalyearproject/CustomWidgets/Customtoast.dart';
 import 'package:finalyearproject/models/STDRegistermodel.dart';
 import 'package:finalyearproject/models/user.dart';
-import 'package:finalyearproject/services/DBuser.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -35,6 +34,7 @@ class AuthService {
       return result;
     } on FirebaseAuthException catch (error) {
       print("firebase aUTH eXCePTION ayaaaa hai");
+
       if (error.code == 'user-not-found') {
         CustomToast().showerrorToast('User not found');
       } else if (error.code == 'wrong-password') {
@@ -61,27 +61,29 @@ class AuthService {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: studentModel.email, password: studentModel.password);
-      // StudentModel studentModel = StudentModel(
-      //     studentId: result.user.uid,
-      //     dob: "3-07-1999",
-      //     email: "ammar555@gmail.com",
-      //     firstname: "Ammar555",
-      //     gender: 0,
-      //     lastname: "Z",
-      //     password: "ammar123",
-      //     phone: "000");
-      if (result.user != null) {
-        User firebaseUser = result.user;
 
+      if (result.user != null) {
+        StudentModel newStudent = StudentModel(
+          firstname: studentModel.firstname,
+          lastname: studentModel.lastname,
+          dob: studentModel.dob,
+          educationlevel: studentModel.educationlevel,
+          fieldOfEducation: studentModel.fieldOfEducation,
+          gender: studentModel.gender,
+          phone: studentModel.phone,
+          studentId: result.user.uid,
+          password: studentModel.password,
+          email: studentModel.email,
+        );
+        print("new user created");
+        print("The new created UID of auth user is " + result.user.uid);
+        print("The new created UID of student is " + newStudent.studentId);
+        print("The new created email is " + result.user.email);
         await students
             .doc(result.user.uid)
-            .set(studentModel.toJson())
-            .whenComplete(() {
-          // Provider.of<UserDetailProvider>(context, listen: false)
-          //     .setUserDetail(userDetail);
-        });
+            .set(newStudent.toJson())
+            .whenComplete(() {});
 
-        print("new user created hurray");
         return true;
       } else {
         return null;
@@ -130,15 +132,53 @@ class AuthService {
     }
   }
 
-/*   GoogleSignInAccount googleUser = await googleSignIn.signIn();
-GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-final AuthCredential credential = GoogleAuthProvider.getCredential(
-    accessToken: googleAuth.accessToken,
-    idToken: googleAuth.idToken,
-);
-FirebaseUser firebaseUser = (await firebaseAuth.signInWithCredential(credential)).user;*/
+//Google sign in new
+  Future<void> linkGoogle(
+      StudentModel studentModel, BuildContext context) async {
+    // Trigger the Google Authentication flow.
+    final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
+    // Obtain the auth details from the request.
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
+    // Create a new credential.
+    final GoogleAuthCredential googleCredential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
 
-//Google Sign in
+    // Sign in to Firebase with the Google [UserCredential].
+    final UserCredential googleUserCredential =
+        await FirebaseAuth.instance.signInWithCredential(googleCredential);
+    final User user = googleUserCredential.user;
+
+    if (googleUserCredential.user != null) {
+      User firebaseUser = googleUserCredential.user;
+      StudentModel newStudent = StudentModel(
+        firstname: user.displayName,
+        // lastname: studentModel.lastname,
+        // dob: studentModel.dob,
+        // educationlevel: studentModel.educationlevel,
+        //fieldOfEducation: user.
+        // gender: studentModel.gender,
+        phone: user.phoneNumber,
+        studentId: googleUserCredential.user.uid,
+        //password: studentModel.password,
+        email: user.email,
+      );
+      print(firebaseUser.email);
+
+      print("User Email:${user.email}");
+      print('User password: ${user.displayName}');
+      print('User password: ${user.metadata}');
+
+      return _userFromFirebaseUser(user);
+    } else {
+      print('Sign in failed');
+    }
+  }
+//
+
+//Google Sign in - old
   Future gsignIn(StudentModel studentModel, BuildContext context) async {
     GoogleSignInAccount googleSignInAccount = await googleSignin.signIn();
     GoogleSignInAuthentication gSA = await googleSignInAccount.authentication;
@@ -148,6 +188,12 @@ FirebaseUser firebaseUser = (await firebaseAuth.signInWithCredential(credential)
     );
     final UserCredential authResult =
         await _auth.signInWithCredential(credential);
+    final GoogleAuthCredential googleCredential = GoogleAuthProvider.credential(
+      accessToken: gSA.accessToken,
+      idToken: gSA.idToken,
+    );
+    final UserCredential googleUserCredential =
+        await FirebaseAuth.instance.signInWithCredential(googleCredential);
     final User user = authResult.user;
     if (authResult.user != null) {
       User firebaseUser = authResult.user;
@@ -160,6 +206,7 @@ FirebaseUser firebaseUser = (await firebaseAuth.signInWithCredential(credential)
     }
   }
 
+//
   //googleSignout
   Future gsignOut() async {
     GoogleSignIn().signOut().whenComplete(() {

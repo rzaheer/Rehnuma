@@ -7,7 +7,7 @@ final Color textColor = Colors.white;
 final Color secondaryColor = Colors.white;
 final Color highlightColor = Color(0xFF088185);
 final Color inputTextColor = Color(0xFF024D61);
-final Color buttonColor = Color(0xFFCB1C1C);
+final Color buttonColor = Colors.red[900];
 const kHintColor = Color(0xFF7F7F7F);
 
 Size size(BuildContext context) {
@@ -15,13 +15,9 @@ Size size(BuildContext context) {
   return size;
 }
 
-const baseUrl = "http://10.0.2.2:8080/";
-const baseUrlAllUni = "http://10.0.2.2:5000/";
+/* const baseUrl = "http://10.0.2.2:8080/";
+const baseUrlAllUni = "http://10.0.2.2:5000/"; */
+const baseUrl = "https://uni-recommender.herokuapp.com/result";
+const baseUrlAllUni =
+    "https://get-universities.herokuapp.com/getAllUniversities";
 //Color(0xFF#56E3E8),
-const kInputTextStyle = TextStyle(
-  fontFamily: 'RalewayMedium',
-  fontSize: 16,
-);
-var kInputHintTextStyle = kInputTextStyle.copyWith(
-  color: kHintColor,
-);

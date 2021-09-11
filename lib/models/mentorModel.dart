@@ -19,11 +19,20 @@ class MentorModel {
     this.ratings,
   });
 
-  factory MentorModel.fromJson(Map<String, dynamic> json) => MentorModel();
+  factory MentorModel.fromJson(Map<String, dynamic> json) => MentorModel(
+        name: json["fullname"] ?? "",
+        email: json["email"] ?? "",
+        fees: json["fees"] ?? "",
+        mentorId: json["mentorId"] ?? "",
+        jobDesc: json["jobDesc"] ?? "",
+        education: json["education"] ?? "",
+        ratings: json["ratings"] ?? 0,
+        experience: json["experience"] ?? "",
+      );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toMap() => {
         "mentorId": mentorId,
-        "name": name,
+        "fullname": name,
         "jobDesc": jobDesc,
         "email": email,
         "fees": fees,

@@ -1,6 +1,9 @@
 import 'package:finalyearproject/CustomWidgets/Custombottombar.dart';
 import 'package:finalyearproject/Global.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Home/DoctorDetails.dart';
+import 'package:finalyearproject/models/mentorModel.dart';
+import 'package:finalyearproject/services/DBservice.dart';
+import 'package:finalyearproject/services/bookingservice.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -10,6 +13,7 @@ class DoctorList extends StatefulWidget {
 }
 
 class _DoctorListState extends State<DoctorList> {
+  List<MentorModel> mentorList = [];
   final counselorname = [
     "Dr. Moosa Khan",
     "Dr. Asim khurram",
@@ -24,6 +28,23 @@ class _DoctorListState extends State<DoctorList> {
     "Career advisor",
     "Psychologist"
   ];
+
+  getAllMentors() async {
+    await DBService().getMentorsList().then((value) {
+      setState(() {
+        mentorList = value;
+      });
+    });
+    print("mentors arhy hain");
+    print(mentorList.length);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    getAllMentors();
+  }
 
   TextEditingController searchcontroller = TextEditingController();
   String searchName;
