@@ -41,6 +41,19 @@ class DBService {
     }
   } */
 
+  Future getSlotsList() async {
+    CollectionReference slotRef = _db.collection('Slots');
+    List<MentorModel> _allMentors = [];
+    try {
+      QuerySnapshot qs = await slotRef.get();
+      qs.docs.forEach((q) {
+        print(q.data());
+      });
+    } catch (e) {
+      print("Error in mentor get list: " + e.toString());
+    }
+  }
+
   Future<List<UniversityModel>> getData(String university) async {
     List<UniversityModel> _allUnis = [];
     //url for recommender
