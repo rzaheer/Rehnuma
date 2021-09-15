@@ -4,7 +4,7 @@ class StudentModel {
   final String lastname;
   final String phone;
   final String email;
-  final String password;
+
   final String gender;
   final String dob;
   final String educationlevel;
@@ -16,14 +16,22 @@ class StudentModel {
     this.lastname,
     this.phone,
     this.email,
-    this.password,
     this.gender,
     this.dob,
     this.educationlevel,
     this.fieldOfEducation,
   });
 
-  factory StudentModel.fromJson(Map<String, dynamic> json) => StudentModel();
+  factory StudentModel.fromJson(Map<String, dynamic> json) => StudentModel(
+      studentId: json["studentId"] ?? "",
+      firstname: json["firstname"] ?? "",
+      lastname: json["lastname"] ?? "",
+      gender: json["gender"] ?? "",
+      dob: json["dob"] ?? "",
+      educationlevel: json["educationlevel"] ?? "",
+      email: json["email"] ?? "",
+      fieldOfEducation: json["fieldOfEducation"] ?? "",
+      phone: json["phone"] ?? "");
 
   Map<String, dynamic> toJson() => {
         "studentId": studentId,
@@ -33,5 +41,7 @@ class StudentModel {
         "phone": phone,
         "gender": gender,
         "dob": dob,
+        "educationlevel": educationlevel,
+        "fieldofeducation": fieldOfEducation
       };
 }

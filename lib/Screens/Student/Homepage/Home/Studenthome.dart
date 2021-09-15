@@ -9,11 +9,14 @@ import 'package:finalyearproject/Screens/Student/Homepage/Home/DrawerItems/Notif
 import 'package:finalyearproject/models/mentorModel.dart';
 
 import 'package:finalyearproject/services/DBservice.dart';
+import 'package:finalyearproject/services/StudentProvider.dart';
 import 'package:finalyearproject/services/auth.dart';
+import 'package:finalyearproject/services/sharedFunctions.dart';
 import 'package:finalyearproject/wrapper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 class StudentHome extends StatefulWidget {
   @override
@@ -52,12 +55,9 @@ class _StudentHomeState extends State<StudentHome> {
         mentorList = value;
       });
     });
-    print("Length :" + mentorList.length.toString());
     if (mentorList.length != 0) {
       print(mentorList.last.email);
     }
-
-    print(mentorList.first);
   }
 
   @override
@@ -95,7 +95,7 @@ class _StudentHomeState extends State<StudentHome> {
           scrollDirection: Axis.vertical,
           children: [
             RaisedButton(onPressed: () async {
-              DBService().getSlotsList();
+              DBService().getStudentByUid("mDa9GL1hUSX9IPbXFc4AeaDgAc52");
             }),
             Text(
               "Get the best career suggestions with our experts' guidance!",
@@ -404,26 +404,30 @@ class _StudentHomeState extends State<StudentHome> {
       drawer: Drawer(
         child: ListView(
           children: [
-            UserAccountsDrawerHeader(
-              accountName: Text(
-                "Ramsha Zaheer",
-                style: TextStyle(
-                  fontSize: 20,
+            Consumer<StudentProvider>(builder: (_, studentProv, __) {
+              return UserAccountsDrawerHeader(
+                accountName: Text(
+                  studentProv.currStudent.firstname +
+                      " " +
+                      studentProv.currStudent.lastname,
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
                 ),
-              ),
-              accountEmail: Text(_uEmail),
-              arrowColor: Colors.red,
-              currentAccountPicture: CircleAvatar(
-                backgroundColor:
-                    Theme.of(context).platform == TargetPlatform.android
-                        ? secondaryColor
-                        : primaryColor,
-                child: Text(
-                  "R",
-                  style: TextStyle(fontSize: 40.0),
+                accountEmail: Text(_uEmail),
+                arrowColor: Colors.red,
+                currentAccountPicture: CircleAvatar(
+                  backgroundColor:
+                      Theme.of(context).platform == TargetPlatform.android
+                          ? secondaryColor
+                          : primaryColor,
+                  child: Text(
+                    getInitials(studentProv.currStudent.firstname),
+                    style: TextStyle(fontSize: 40.0),
+                  ),
                 ),
-              ),
-            ),
+              );
+            }),
             ListTile(
               leading: Icon(Icons.settings),
               title: Text('Notifications'),

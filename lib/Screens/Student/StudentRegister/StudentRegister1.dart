@@ -61,7 +61,7 @@ class _StudentRegisterState extends State<StudentRegister> {
           child: Container(
               padding: EdgeInsets.all(20),
               width: size.width,
-              height: size.height,
+              // height: size.height,
               color: primaryColor,
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,

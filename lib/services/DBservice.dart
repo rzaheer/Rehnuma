@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finalyearproject/Global.dart';
+import 'package:finalyearproject/models/STDRegistermodel.dart';
 import 'package:finalyearproject/models/UniversityModel.dart';
 import 'package:finalyearproject/models/mentorModel.dart';
 import 'package:finalyearproject/models/slotModel.dart';
@@ -10,6 +11,8 @@ import 'package:http/http.dart' as http;
 
 class DBService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
+  CollectionReference studentCollection =
+      FirebaseFirestore.instance.collection('Students');
   /* Future<List<UniversityModel>> getData(String uni) async {
     List<UniversityModel> _allUnis = [];
     //url for recommender
@@ -42,18 +45,18 @@ class DBService {
     }
   } */
 
-  Future getSlotsList() async {
-    CollectionReference slotRef = _db.collection('Slots');
-    List<MentorModel> _allMentors = [];
-    try {
-      QuerySnapshot qs = await slotRef.get();
-      qs.docs.forEach((q) {
-        print(q.data());
-      });
-    } catch (e) {
-      print("Error in mentor get list: " + e.toString());
-    }
-  }
+  // Future getSlotsList() async {
+  //   CollectionReference slotRef = _db.collection('Slots');
+  //   List<MentorModel> _allMentors = [];
+  //   try {
+  //     QuerySnapshot qs = await slotRef.get();
+  //     qs.docs.forEach((q) {
+  //       print(q.data());
+  //     });
+  //   } catch (e) {
+  //     print("Error in mentor get list: " + e.toString());
+  //   }
+  // }
 
   Future<List<UniversityModel>> getData(String university) async {
     List<UniversityModel> _allUnis = [];
@@ -157,5 +160,20 @@ class DBService {
   }
 
   ////////////////////
-
+  Future<StudentModel> getStudentByUid(String uid) async {
+    try {
+      DocumentSnapshot doc = await studentCollection.doc(uid).get();
+      if (doc != null) {
+    
+        StudentModel student = StudentModel.fromJson(doc.data());
+     
+        return student;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print("Error: " + e.toString());
+      return null;
+    }
+  }
 }

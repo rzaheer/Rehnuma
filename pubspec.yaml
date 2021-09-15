@@ -36,7 +36,6 @@ dependencies:
   firebase_auth: ^0.20.1
   cloud_firestore: ^0.16.0+1
   dropdownfield: ^1.0.3
-  provider: ^4.3.2+3
   firebase_core: ^0.7.0
   google_sign_in: ^4.4.6
   fluttertoast: ^7.1.0
@@ -50,6 +49,7 @@ dependencies:
   pie_chart: ^1.2.0
   filter_list: ^0.0.7
   email_auth: ^0.0.1+2
+  provider: ^4.3.3
 
 
 

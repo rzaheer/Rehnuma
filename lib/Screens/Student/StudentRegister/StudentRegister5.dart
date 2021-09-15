@@ -166,11 +166,11 @@ class _StudentRegister5State extends State<StudentRegister5> {
                                 educationlevel: currStudentModel.educationlevel,
                                 fieldOfEducation:
                                     currStudentModel.fieldOfEducation,
-                                password: passwordController.text,
+                         
                               );
                               await AuthService()
                                   .registerWithEmailAndPassword(
-                                      _studentModel, context)
+                                      _studentModel,passwordController.text, context)
                                   .then((value) {
                                 if (value == true) {
                                   showDialog(
@@ -216,8 +216,8 @@ class _StudentRegister5State extends State<StudentRegister5> {
                                   .showerrorToast("Passwords donot match");
                             }
                           }
-                          AuthService().registerWithEmailAndPassword(
-                              StudentModel(), context);
+                          // AuthService().registerWithEmailAndPassword(
+                          //     StudentModel(), context);
                         },
                         title: 'REGISTER',
                       ),
