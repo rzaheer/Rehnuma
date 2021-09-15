@@ -52,8 +52,11 @@ class _StudentHomeState extends State<StudentHome> {
         mentorList = value;
       });
     });
-    print("++++++++++++");
-    print(mentorList.length);
+    print("Length :" + mentorList.length.toString());
+    if (mentorList.length != 0) {
+      print(mentorList.last.email);
+    }
+
     print(mentorList.first);
   }
 
@@ -91,6 +94,9 @@ class _StudentHomeState extends State<StudentHome> {
           shrinkWrap: true,
           scrollDirection: Axis.vertical,
           children: [
+            RaisedButton(onPressed: () async {
+              DBService().getSlotsList();
+            }),
             Text(
               "Get the best career suggestions with our experts' guidance!",
               maxLines: 2,

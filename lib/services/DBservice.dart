@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finalyearproject/Global.dart';
 import 'package:finalyearproject/models/UniversityModel.dart';
 import 'package:finalyearproject/models/mentorModel.dart';
+import 'package:finalyearproject/models/slotModel.dart';
 import 'package:http/http.dart' as http;
 
 class DBService {
@@ -122,6 +123,23 @@ class DBService {
     } catch (e) {
       print("Error in mentor get list: " + e.toString());
       return _allMentors;
+    }
+  }
+
+  Future<List<SlotModel>> getSlotsList() async {
+    CollectionReference slotRef = _db.collection('Slots');
+
+    List<SlotModel> _allSlots = [];
+    try {
+      QuerySnapshot qs = await slotRef.get();
+      _allSlots = qs.docs
+          .map((DocumentSnapshot doc) => SlotModel.fromMap(doc.data()))
+          .toList();
+
+      return _allSlots;
+    } catch (e) {
+      print("Error in mentor get list: " + e.toString());
+      return _allSlots;
     }
   }
 
