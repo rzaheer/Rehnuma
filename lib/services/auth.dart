@@ -2,10 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finalyearproject/CustomWidgets/Customtoast.dart';
 import 'package:finalyearproject/models/STDRegistermodel.dart';
 import 'package:finalyearproject/models/user.dart';
+import 'package:finalyearproject/services/DBservice.dart';
+import 'package:finalyearproject/services/StudentProvider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -27,11 +30,19 @@ class AuthService {
   Future signInEmailPass(
       String email, String password, BuildContext context) async {
     try {
-      UserCredential result = await _auth
-          .signInWithEmailAndPassword(email: email, password: password)
-          .whenComplete(() {});
+      UserCredential userCreds = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      String uid = userCreds.user.uid;
+      if (userCreds != null) {
+        await DBService().getStudentByUid(uid).then((student) {
+          StudentProvider studentProvider =
+              Provider.of<StudentProvider>(context, listen: false);
+          studentProvider.setCurrentStudent(student);
+        });
+      }
+
       CustomToast().showsuccessToast("Login successful");
-      return result;
+      return userCreds;
     } on FirebaseAuthException catch (error) {
       print("firebase aUTH eXCePTION ayaaaa hai");
 
@@ -57,10 +68,10 @@ class AuthService {
   }
 
   Future registerWithEmailAndPassword(
-      StudentModel studentModel, BuildContext context) async {
+      StudentModel studentModel, String password, BuildContext context) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
-          email: studentModel.email, password: studentModel.password);
+          email: studentModel.email, password: password);
 
       if (result.user != null) {
         StudentModel newStudent = StudentModel(
@@ -72,7 +83,6 @@ class AuthService {
           gender: studentModel.gender,
           phone: studentModel.phone,
           studentId: result.user.uid,
-          password: studentModel.password,
           email: studentModel.email,
         );
         print("new user created");

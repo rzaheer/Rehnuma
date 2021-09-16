@@ -9,7 +9,7 @@ class DBuser {
       firstname: "Ramsha",
       gender: "male",
       lastname: "Z",
-      password: "123",
+ 
       phone: "000");
   setData() async {
     await firestore.collection("Mentors").doc().set(reg1.toJson());
