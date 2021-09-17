@@ -1,9 +1,12 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:finalyearproject/CustomWidgets/Custombottombar.dart';
+import 'package:finalyearproject/CustomWidgets/Loading.dart';
 import 'package:finalyearproject/Global.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Home/DoctorDetails.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Home/DoctorsList.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Home/DrawerItems/Notifications.dart';
+import 'package:finalyearproject/models/mentorModel.dart';
+import 'package:finalyearproject/services/DBservice.dart';
 import 'package:finalyearproject/services/auth.dart';
 import 'package:finalyearproject/wrapper.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +32,33 @@ class _StudentHomeState extends State<StudentHome> {
     "Career advisor",
     "Psychologist"
   ];
+  List<MentorModel> mentors=[];
+  bool isLoading=true;
+  getMentor()async{
+    setState(() {
+          isLoading=true;
+        });
+    await DBService().getMentors().then((value) {
+      setState(() {
+              mentors=value;
+              isLoading=false;
+            });
+        print("lllllllllll");    
+        print(mentors);    
+    
+    }
+    ).catchError((e){
+      print(e.toString());
+      getMentor();
+
+    });
+  }
+  @override
+  void initState() {
+    super.initState();
+    getMentor();
+  }
+
 
   TextEditingController searchcontroller = TextEditingController();
   String searchName;
@@ -130,7 +160,7 @@ class _StudentHomeState extends State<StudentHome> {
       drawerEnableOpenDragGesture: true,
       drawerScrimColor: primaryColor,
       bottomNavigationBar: CustomNavbar(index: 0, indashboard: null),
-      body: Container(
+      body: isLoading?Loading() :Container(
         color: secondaryColor,
         child: ListView(
           padding: EdgeInsets.all(10),
@@ -282,9 +312,9 @@ class _StudentHomeState extends State<StudentHome> {
                   scrollDirection: Axis.horizontal,
                   shrinkWrap: true,
                   primary: false,
-                  itemCount: counselorname.length,
+                  itemCount: mentors.length,
                   itemBuilder: (context, index) {
-                    final item = counselorname[index];
+                    final item = "${mentors[index].firstName}";
                     return InkWell(
                       onTap: () {
                         Navigator.push(
@@ -348,11 +378,11 @@ class _StudentHomeState extends State<StudentHome> {
             ListView.builder(
                 primary: false,
                 shrinkWrap: true,
-                itemCount: counselorname.length,
+                itemCount: mentors.length,
                 scrollDirection: Axis.vertical,
                 itemBuilder: (context, index) {
-                  final professions = profession[index];
-                  final details = counselorname[index];
+                  //final professions = profession[index];
+                  //final details = counselorname[index];
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
@@ -386,7 +416,7 @@ class _StudentHomeState extends State<StudentHome> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                details,
+                                mentors[index].jobDesc,
                                 style: TextStyle(
                                   fontSize: 17,
                                   fontWeight: FontWeight.bold,
@@ -394,7 +424,7 @@ class _StudentHomeState extends State<StudentHome> {
                                 ),
                               ),
                               Text(
-                                professions,
+                                "${mentors[index].firstName}",
                                 style: TextStyle(
                                   fontSize: 13,
                                   fontStyle: FontStyle.italic,
@@ -406,7 +436,7 @@ class _StudentHomeState extends State<StudentHome> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    '1000 PKR',
+                                    '${mentors[index].fees}',
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,

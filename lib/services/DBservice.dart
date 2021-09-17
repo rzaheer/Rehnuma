@@ -7,6 +7,7 @@ import 'package:finalyearproject/models/mentorModel.dart';
 import 'package:http/http.dart' as http;
 
 class DBService {
+  FirebaseFirestore _db = FirebaseFirestore.instance;
   Future<List<UniversityModel>> getData(String uni) async {
     List<UniversityModel> _allUnis = [];
     //url for recommender
@@ -90,4 +91,22 @@ eventsQuery.documents.forEach((document) {
 
 return eventsHashMap.values.toList();
 } */
+Future<List<MentorModel>> getMentors() async {
+    List<MentorModel> mentor = [];
+    try {
+      await _db
+          .collection("Mentor").get()
+          .then((qSnapShot) {
+            print(qSnapShot);
+        for (int i = 0; i < qSnapShot.docs.length; i++) {
+          mentor.add(MentorModel.fromMap(qSnapShot.docs[i].data()));
+        }
+      });
+
+      return mentor;
+    } catch (e) {
+      print("Error aya hai getmentor db request mein: ${e.toString()}");
+      return mentor;
+    }
+  }
 }

@@ -1,6 +1,8 @@
 import 'package:finalyearproject/CustomWidgets/Custombottombar.dart';
 import 'package:finalyearproject/Global.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Home/DoctorDetails.dart';
+import 'package:finalyearproject/models/mentorModel.dart';
+import 'package:finalyearproject/services/DBservice.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -24,6 +26,31 @@ class _DoctorListState extends State<DoctorList> {
     "Career advisor",
     "Psychologist"
   ];
+  List<MentorModel> mentors=[];
+  getMentor()async{
+    // setState(() {
+    //       isLoading=true;
+    //     });
+    await DBService().getMentors().then((value) {
+      setState(() {
+              mentors=value;
+              //isLoading=false;
+            });
+        print("lllllllllll");    
+        print(mentors.length);    
+    
+    }
+    ).catchError((e){
+      print(e.toString());
+      getMentor();
+
+    });
+  }
+  @override
+  void initState() {
+    super.initState();
+    getMentor();
+  }
 
   TextEditingController searchcontroller = TextEditingController();
   String searchName;

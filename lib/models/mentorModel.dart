@@ -1,29 +1,51 @@
 class MentorModel {
   final String mentorId;
-  final String name;
+  final String cnic;
+  final String firstName,fullName;
   final String jobDesc;
   final String email;
   final String fees;
   final String experience;
-  final String education;
+  final String education,phoneNumber;
   final int ratings;
+  String gender;
 
   MentorModel({
     this.mentorId,
-    this.name,
+    this.cnic,
+    this.firstName,this.fullName,
     this.email,
     this.jobDesc,
     this.fees,
-    this.education,
+    this.education,this.phoneNumber,
     this.experience,
     this.ratings,
+    this.gender
   });
 
-  factory MentorModel.fromJson(Map<String, dynamic> json) => MentorModel();
+  //factory MentorModel.fromJson(Map<String, dynamic> json) => MentorModel();
+    factory MentorModel.fromMap(Map<String, dynamic> json) {
+    final MentorModel courseMod = MentorModel(
+      mentorId: json["mentorId"],
+      cnic: json["CNIC"],
+      email: json["email"],
+      firstName: json["firstName"],
+      fullName: json["fullName"],
+      fees: json["fees"],
+      experience: json["experience"],
+      jobDesc: json["jobDesc"] ,
+      ratings: json["Ratings"]
+    );
+
+    return courseMod;
+  }
+
+
 
   Map<String, dynamic> toJson() => {
         "mentorId": mentorId,
-        "name": name,
+        "firstName": firstName,
+        "fullName":fullName,
         "jobDesc": jobDesc,
         "email": email,
         "fees": fees,
