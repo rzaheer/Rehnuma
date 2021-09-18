@@ -94,7 +94,7 @@ class _CustomNavbarState extends State<CustomNavbar> {
                 FontAwesomeIcons.comments,
                 size: 22,
               ),
-              title: Text('Forum',
+              title: Text('Chats',
                   style: TextStyle(
                     fontSize: 12,
                   ))),
