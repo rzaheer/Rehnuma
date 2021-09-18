@@ -1,4 +1,3 @@
-import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:finalyearproject/CustomWidgets/Customtoast.dart';
 import 'package:finalyearproject/CustomWidgets/Loading.dart';
@@ -10,7 +9,9 @@ import 'package:finalyearproject/models/STDRegistermodel.dart';
 import 'package:finalyearproject/models/UniversityModel.dart';
 import 'package:finalyearproject/services/DBservice.dart';
 import 'package:finalyearproject/services/auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class StudentLogin extends StatefulWidget {
   @override
@@ -18,6 +19,9 @@ class StudentLogin extends StatefulWidget {
 }
 
 class _StudentLoginState extends State<StudentLogin> {
+  GoogleSignIn _googleSignIn = GoogleSignIn();
+  FirebaseAuth _authh;
+  bool isUserSignedIn = false;
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
@@ -32,10 +36,42 @@ class _StudentLoginState extends State<StudentLogin> {
   DBService dbService = DBService();
   List<UniversityModel> allRecommendedUni = [];
 
+  bool userSignedIn;
+
+/*   ////////////////////////////
+  Future<User> _handleSignIn() async {
+    // hold the instance of the authenticated user
+    User user;
+    // flag to check whether we're signed in already
+    bool isSignedIn = await _googleSignIn.isSignedIn();
+    setState(() {
+      isUserSignedIn = userSignedIn;
+    });
+    if (isSignedIn) {
+      // if so, return the current user
+      user = _authh.currentUser;
+    } else {
+      final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      // get the credentials to (access / id token)
+      // to sign in via Firebase Authentication
+      final AuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
+      user = (await _authh.signInWithCredential(credential)).user;
+      userSignedIn = await _googleSignIn.isSignedIn();
+      setState(() {
+        isUserSignedIn = userSignedIn;
+      });
+    }
+
+    return user;
+  } */
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    bool load = false;
+    // bool load = false;
     final bool isValid = EmailValidator.validate(email);
 
     return Scaffold(
@@ -146,7 +182,7 @@ class _StudentLoginState extends State<StudentLogin> {
                                     if (result == null) {
                                       setState(() {
                                         CustomToast().showerrorToast(
-                                            'Incorrect credentials');
+                                            'Incorrect credentials, please try again.');
                                       });
                                     } else {
                                       setState(() {
@@ -215,7 +251,7 @@ class _StudentLoginState extends State<StudentLogin> {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(15)),
                               onPressed: () async {
-                                await _auth.gsignIn(studentModel, context);
+                                await _auth.linkGoogle(studentModel, context);
                               },
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,

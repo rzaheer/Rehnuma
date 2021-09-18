@@ -5,7 +5,7 @@ class MentorModel {
   final String jobDesc;
   final String email;
   final String fees;
-  final String experience;
+  final int experience;
   final String education,phoneNumber;
   final int ratings;
   String gender;
@@ -30,11 +30,14 @@ class MentorModel {
       cnic: json["CNIC"],
       email: json["email"],
       firstName: json["firstName"],
-      fullName: json["fullName"],
+      fullName: json["fullname"],
       fees: json["fees"],
       experience: json["experience"],
       jobDesc: json["jobDesc"] ,
-      ratings: json["Ratings"]
+      ratings: json["Ratings"],
+      gender: json["gender"],
+      education: json["education"],
+      phoneNumber: json["phoneNumber"]
     );
 
     return courseMod;
@@ -42,7 +45,7 @@ class MentorModel {
 
 
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toMap() => {
         "mentorId": mentorId,
         "firstName": firstName,
         "fullName":fullName,
@@ -52,5 +55,6 @@ class MentorModel {
         "educatiion": education,
         "experience": experience,
         "ratings": ratings,
+        "gender":gender
       };
 }

@@ -1,4 +1,6 @@
+import 'package:email_auth/email_auth.dart';
 import 'package:finalyearproject/CustomWidgets/Custombutton.dart';
+import 'package:finalyearproject/CustomWidgets/Customtoast.dart';
 import 'package:finalyearproject/Global.dart';
 import 'package:finalyearproject/Screens/Student/ForgotPassword/ForgotPassword2.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +11,38 @@ class ForgotPassword1 extends StatefulWidget {
 }
 
 class _ForgotPassword1State extends State<ForgotPassword1> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _otpController = TextEditingController();
+
+  void SendOTP() async {
+    EmailAuth.sessionName = "Rehnuma";
+    var res = await EmailAuth.sendOtp(
+      receiverMail: _emailController.value.text,
+    );
+    if (res) {
+      print("OTP Sent");
+    } else
+      print('We could not sent OTP');
+  }
+
+  void VerifyOTP() {
+    var res = EmailAuth.validate(
+      receiverMail: _emailController.value.text,
+      userOTP: _otpController.text,
+    );
+    if (res) {
+      print("OTP Verified");
+    } else
+      print('Invalid OTP');
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize the package
+    /// Configuring the remote server
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -18,9 +52,10 @@ class _ForgotPassword1State extends State<ForgotPassword1> {
         color: primaryColor,
         width: size.width,
         height: size.height,
+        padding: EdgeInsets.all(20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
@@ -46,43 +81,50 @@ class _ForgotPassword1State extends State<ForgotPassword1> {
               'Send Password reset code to :',
               style: TextStyle(
                 fontSize: 20,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w400,
                 color: textColor,
               ),
             ),
             SizedBox(
               height: 20,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Radio(
-                  value: null,
-                  groupValue: null,
-                  onChanged: null,
-                ),
-                Text(
-                  'ishazaheer3@gmail.com',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: textColor,
+            Center(
+              child: SizedBox(
+                height: 45,
+                width: size.width / 1.2,
+                child: TextFormField(
+                  controller: _emailController,
+                  style: TextStyle(fontSize: 16, color: inputTextColor),
+                  decoration: InputDecoration(
+                    disabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    filled: true,
+                    fillColor: Colors.white,
+                    hintText: 'Email',
                   ),
+                  validator: (value) {
+                    if (value == null) {
+                      CustomToast().showerrorToast("Enter email");
+                    }
+                  },
                 ),
-              ],
+              ),
             ),
             SizedBox(
               height: 20,
             ),
-            CustomButton(
-              buttoncolor: buttonColor,
-              height: 50,
-              width: size.width / 2,
-              title: 'SEND CODE',
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ForgotPassword2()));
-              },
+            Center(
+              child: CustomButton(
+                  buttoncolor: buttonColor,
+                  height: 50,
+                  width: size.width / 3,
+                  title: 'SEND CODE',
+                  onPressed: () {
+                    SendOTP();
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ForgotPassword2(
+                            enteredEmail: _emailController.text)));
+                  }),
             ),
           ],
         ),

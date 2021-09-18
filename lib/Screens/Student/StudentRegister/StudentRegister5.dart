@@ -1,7 +1,10 @@
 import 'package:finalyearproject/CustomWidgets/Custombutton.dart';
+import 'package:finalyearproject/CustomWidgets/Customdialog.dart';
 import 'package:finalyearproject/CustomWidgets/Customtoast.dart';
 import 'package:finalyearproject/CustomWidgets/Loading.dart';
 import 'package:finalyearproject/Global.dart';
+import 'package:finalyearproject/Screens/Student/Homepage/Home/Studenthome.dart';
+import 'package:finalyearproject/Screens/Student/Login/Login.dart';
 import 'package:finalyearproject/models/STDRegistermodel.dart';
 import 'package:finalyearproject/services/auth.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +24,8 @@ class _StudentRegister5State extends State<StudentRegister5> {
   TextEditingController confirmPasswordController = TextEditingController();
   StudentModel currStudentModel;
 
+  bool register = false;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -39,6 +44,20 @@ class _StudentRegister5State extends State<StudentRegister5> {
         return 'Enter valid password';
       else
         return null;
+    }
+  }
+
+  void ShowDialog() {
+    if (register == true) {
+      CustomDialog(
+        contentString: 'Lets log into your account now.',
+        titleString: "Welcome, ${currStudentModel.firstname}",
+        okFunction: () {
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => Wrapper()),
+              (Route<dynamic> route) => false);
+        },
+      );
     }
   }
 
@@ -100,16 +119,6 @@ class _StudentRegister5State extends State<StudentRegister5> {
                     SizedBox(
                       height: 20,
                     ),
-                    /* FlutterPwValidator(
-                        controller: passwordController,
-                        minLength: 6,
-                        uppercaseCharCount: 1,
-                        numericCharCount: 1,
-                        width: 400,
-                        height: 100,
-                        onSuccess: () {
-                          print("Matched");
-                        }), */
                     SizedBox(height: 20),
                     Center(
                       child: SizedBox(
@@ -143,7 +152,7 @@ class _StudentRegister5State extends State<StudentRegister5> {
                             if (passwordController.text ==
                                 confirmPasswordController.text) {
                               print("hogyaaaaaaa validate");
-                              // print(currStudentModel.educationlevel);
+
                               print(currStudentModel.educationlevel);
                               print(currStudentModel.fieldOfEducation);
 
@@ -157,20 +166,49 @@ class _StudentRegister5State extends State<StudentRegister5> {
                                 educationlevel: currStudentModel.educationlevel,
                                 fieldOfEducation:
                                     currStudentModel.fieldOfEducation,
-                                password: passwordController.text,
+                         
                               );
                               await AuthService()
                                   .registerWithEmailAndPassword(
-                                      _studentModel, context)
+                                      _studentModel,passwordController.text, context)
                                   .then((value) {
                                 if (value == true) {
-                                  Navigator.of(context).pushAndRemoveUntil(
-                                      MaterialPageRoute(
-                                          builder: (context) => Wrapper()),
-                                      (Route<dynamic> route) => false);
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext dialogContext) {
+                                        return CustomDialog(
+                                            contentString:
+                                                'You have successfully registered on Rehnuma, Lets start this journey~',
+                                            titleString:
+                                                "Welcome, ${currStudentModel.firstname}😊",
+                                            okFunction: () {
+                                              Navigator.of(context)
+                                                  .pushAndRemoveUntil(
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              StudentHome()),
+                                                      (Route<dynamic> route) =>
+                                                          false);
+                                            });
+                                      });
+
+                                  /*  CustomDialog(
+                                      titleString:
+                                          "Welcome, ${currStudentModel.firstname}",
+                                      contentString:
+                                          'Lets log into your account now.',
+                                      okFunction: () {
+                                        Navigator.of(context)
+                                            .pushAndRemoveUntil(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        Wrapper()),
+                                                (Route<dynamic> route) =>
+                                                    false);
+                                      }); */
                                 } else {
-                                  CustomToast()
-                                      .showerrorToast("Registration failed");
+                                  CustomToast().showerrorToast(
+                                      "Email address is associated with another account");
                                 }
                               });
                             } else {
@@ -178,7 +216,8 @@ class _StudentRegister5State extends State<StudentRegister5> {
                                   .showerrorToast("Passwords donot match");
                             }
                           }
-                          ;
+                          // AuthService().registerWithEmailAndPassword(
+                          //     StudentModel(), context);
                         },
                         title: 'REGISTER',
                       ),

@@ -1,16 +1,26 @@
+import 'dart:developer';
+
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finalyearproject/CustomWidgets/Custombottombar.dart';
 import 'package:finalyearproject/CustomWidgets/Loading.dart';
 import 'package:finalyearproject/Global.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Home/DoctorDetails.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Home/DoctorsList.dart';
+import 'package:finalyearproject/Screens/Student/Homepage/Home/DrawerItems/FAQs.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Home/DrawerItems/Notifications.dart';
+import 'package:finalyearproject/models/STDRegistermodel.dart';
 import 'package:finalyearproject/models/mentorModel.dart';
+
 import 'package:finalyearproject/services/DBservice.dart';
+import 'package:finalyearproject/services/StudentProvider.dart';
 import 'package:finalyearproject/services/auth.dart';
+import 'package:finalyearproject/services/sharedFunctions.dart';
 import 'package:finalyearproject/wrapper.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 class StudentHome extends StatefulWidget {
   @override
@@ -18,6 +28,15 @@ class StudentHome extends StatefulWidget {
 }
 
 class _StudentHomeState extends State<StudentHome> {
+  /*  Stream<Document> snapshot =
+      FirebaseFirestore.instance.collection("Students").doc('').snapshots(); */
+
+  String _uname = ''; //fetch user  full name
+  String _uEmail = ''; //fetch user  full name
+  var mCurrentUser = FirebaseAuth.instance.currentUser;
+  FirebaseAuth _auth;
+  DocumentReference ref;
+
   final counselorname = [
     "Dr. Moosa Khan",
     "Dr. Asim khurram",
@@ -32,38 +51,47 @@ class _StudentHomeState extends State<StudentHome> {
     "Career advisor",
     "Psychologist"
   ];
-  List<MentorModel> mentors=[];
+  List<MentorModel> mentorList = [];
   bool isLoading=true;
-  getMentor()async{
-    setState(() {
-          isLoading=true;
-        });
-    await DBService().getMentors().then((value) {
+  getAllmentorList() async {
+    await DBService().getMentorsList().then((value) {
       setState(() {
-              mentors=value;
-              isLoading=false;
-            });
-        print("lllllllllll");    
-        print(mentors);    
-    
-    }
-    ).catchError((e){
-      print(e.toString());
-      getMentor();
-
+        mentorList = value;
+        isLoading=false;
+      });
     });
+    if (mentorList.length != 0) {
+      print(mentorList.last.email);
+    }
   }
+
   @override
   void initState() {
     super.initState();
-    getMentor();
+    _auth = FirebaseAuth.instance; //auth iniatited
+    _getCurrentUser(); //get user call
+    getAllmentorList();
   }
 
+  _getCurrentUser() async {
+    mCurrentUser = await _auth.currentUser;
+    DocumentSnapshot item = await FirebaseFirestore.instance
+        .collection("Students")
+        .doc(mCurrentUser.uid)
+        .get();
+
+    setState(() {
+      _uname = item['full name'];
+    });
+  }
 
   TextEditingController searchcontroller = TextEditingController();
   String searchName;
   @override
   Widget build(BuildContext context) {
+    var student=Provider.of<StudentProvider>(context,listen: false);
+    print("uuuuuu");
+    print(student.currStudent.studentId);
     var size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -168,6 +196,9 @@ class _StudentHomeState extends State<StudentHome> {
           shrinkWrap: true,
           scrollDirection: Axis.vertical,
           children: [
+            RaisedButton(onPressed: () async {
+              DBService().getStudentByUid("mDa9GL1hUSX9IPbXFc4AeaDgAc52");
+            }),
             Text(
               "Get the best career suggestions with our experts' guidance!",
               maxLines: 2,
@@ -178,71 +209,7 @@ class _StudentHomeState extends State<StudentHome> {
               ),
             ),
             SizedBox(height: 10),
-            /* Row(
-              children: [
-                Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  elevation: 8,
-                  child: SizedBox(
-                    width: size.width / 1.4,
-                    height: 35,
-                    child: Row(
-                      children: [
-                        SizedBox(width: 15),
-                        FaIcon(
-                          FontAwesomeIcons.search,
-                          color: primaryColor,
-                          size: 15,
-                        ),
-                        SizedBox(width: 10),
-                        Container(
-                          width: size.width / 2,
-                          child: TextFormField(
-                            controller: searchcontroller,
-                            style:
-                                TextStyle(fontSize: 14, color: buttonTextColor),
 
-                            decoration: InputDecoration(
-                              disabledBorder: InputBorder.none,
-                              enabledBorder: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                              hintText: 'Search',
-                              hintStyle: TextStyle(fontSize: 14),
-                            ),
-                            onFieldSubmitted: (val) {
-                              setState(() {
-                                searchName = val;
-                              });
-                              print(searchName);
-                              //searchDoctor();
-                            },
-                            // onChanged: (val){
-                            //   if(val.isEmpty){
-                            //    fetchDoctors();
-                            //   }
-                            // },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 70,
-                  height: 40,
-                  child: IconButton(
-                    icon: FaIcon(
-                      FontAwesomeIcons.slidersH,
-                      color: primaryColor,
-                      size: 23,
-                    ),
-                    onPressed: () {},
-                  ),
-                ),
-              ],
-            ), */
-            //,,,,,,,,,,,,,,,,,,,,,,
             CarouselSlider(
               items: [
                 //1st Image of Slider
@@ -312,15 +279,15 @@ class _StudentHomeState extends State<StudentHome> {
                   scrollDirection: Axis.horizontal,
                   shrinkWrap: true,
                   primary: false,
-                  itemCount: mentors.length,
+                  itemCount: mentorList.length,
                   itemBuilder: (context, index) {
-                    final item = "${mentors[index].firstName}";
+                    final item = mentorList[index];
                     return InkWell(
                       onTap: () {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => DoctorDetails()));
+                                builder: (context) => DoctorDetails(mentor: mentorList[index])));
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(5.0),
@@ -346,7 +313,7 @@ class _StudentHomeState extends State<StudentHome> {
                               Container(
                                 height: 50,
                                 child: Text(
-                                  item,
+                                  item.fullName,
                                   textAlign: TextAlign.center,
                                   maxLines: 2,
                                   style: TextStyle(
@@ -378,11 +345,11 @@ class _StudentHomeState extends State<StudentHome> {
             ListView.builder(
                 primary: false,
                 shrinkWrap: true,
-                itemCount: mentors.length,
+                itemCount: mentorList.length,
                 scrollDirection: Axis.vertical,
                 itemBuilder: (context, index) {
-                  //final professions = profession[index];
-                  //final details = counselorname[index];
+                  final professions = mentorList[index];
+                  final details = counselorname[index];
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
@@ -416,7 +383,7 @@ class _StudentHomeState extends State<StudentHome> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                mentors[index].jobDesc,
+                                mentorList[index].jobDesc,
                                 style: TextStyle(
                                   fontSize: 17,
                                   fontWeight: FontWeight.bold,
@@ -424,7 +391,7 @@ class _StudentHomeState extends State<StudentHome> {
                                 ),
                               ),
                               Text(
-                                "${mentors[index].firstName}",
+                                "${mentorList[index].firstName}",
                                 style: TextStyle(
                                   fontSize: 13,
                                   fontStyle: FontStyle.italic,
@@ -436,7 +403,7 @@ class _StudentHomeState extends State<StudentHome> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    '${mentors[index].fees}',
+                                    '${mentorList[index].fees}',
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
@@ -473,7 +440,7 @@ class _StudentHomeState extends State<StudentHome> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  DoctorDetails()));
+                                                  DoctorDetails(mentor: mentorList[index],)));
                                     },
                                     child: Text(
                                       'Tap to view',
@@ -522,6 +489,9 @@ class _StudentHomeState extends State<StudentHome> {
           ],
         ),
       ),
+      
+      
+      
     );
   }
 }

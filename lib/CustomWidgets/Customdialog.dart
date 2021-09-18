@@ -23,8 +23,8 @@ class _CustomDialogState extends State<CustomDialog> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       content: Text(widget.contentString,
           style: TextStyle(color: Colors.black, fontSize: 15)),
-      title: Text(widget.titleString + '!',
-          style: TextStyle(color: textColor, fontSize: 18)),
+      title: Text(widget.titleString,
+          style: TextStyle(color: Colors.green[800], fontSize: 18)),
       actions: [
         FlatButton(
             onPressed: widget.okFunction,

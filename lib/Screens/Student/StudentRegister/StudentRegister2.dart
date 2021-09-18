@@ -1,8 +1,10 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:finalyearproject/CustomWidgets/Custombutton.dart';
+import 'package:finalyearproject/CustomWidgets/Customtoast.dart';
 import 'package:finalyearproject/Global.dart';
 import 'package:finalyearproject/Screens/Student/StudentRegister/StudentRegister5.dart';
 import 'package:finalyearproject/models/STDRegistermodel.dart';
+import 'package:finalyearproject/services/auth.dart';
 import 'package:flutter/material.dart';
 
 class StudentRegister2 extends StatefulWidget {
@@ -132,6 +134,7 @@ class _StudentRegister2State extends State<StudentRegister2> {
                               fieldOfEducation:
                                   currStudentModel.fieldOfEducation,
                             );
+
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(

@@ -20,7 +20,7 @@ class _StudentRegisterState extends State<StudentRegister> {
   TextEditingController lNameController = TextEditingController();
   TextEditingController genderController = TextEditingController();
   final format = DateFormat("dd-MM-yyyy");
-  DateTime selectedDate = DateTime.now();
+  DateTime selectedDate = DateTime.utc(2000);
   bool maleSelected = true, femaleSelected = false, otherSelected = false;
   String gender; //1 for female , 2 for male , 3 for other
   String selectedGender;
@@ -61,7 +61,7 @@ class _StudentRegisterState extends State<StudentRegister> {
           child: Container(
               padding: EdgeInsets.all(20),
               width: size.width,
-              height: size.height,
+              // height: size.height,
               color: primaryColor,
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -206,7 +206,7 @@ class _StudentRegisterState extends State<StudentRegister> {
                           return showDatePicker(
                               context: context,
                               firstDate: DateTime(1900),
-                              initialDate: currentValue ?? DateTime.now(),
+                              initialDate: currentValue ?? DateTime.utc(2000),
                               lastDate: DateTime(2100));
                         },
                       ),
@@ -302,8 +302,6 @@ class _StudentRegisterState extends State<StudentRegister> {
                               CustomToast()
                                   .showerrorToast("Please fill all fields");
                             }
-                            AuthService().registerWithEmailAndPassword(
-                                StudentModel(), context);
                           }
                         },
                         title: 'NEXT',

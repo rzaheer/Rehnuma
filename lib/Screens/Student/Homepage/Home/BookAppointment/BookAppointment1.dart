@@ -3,6 +3,8 @@ import 'package:finalyearproject/CustomWidgets/Custombottombar.dart';
 import 'package:finalyearproject/CustomWidgets/Custombutton.dart';
 import 'package:finalyearproject/Global.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Home/BookAppointment/Payment.dart';
+import 'package:finalyearproject/models/mentorModel.dart';
+import 'package:finalyearproject/services/DBservice.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
@@ -14,22 +16,32 @@ class BookAppointment1 extends StatefulWidget {
 
 class _BookAppointment1State extends State<BookAppointment1> {
   int selectedIndex;
-  final timeSlots = [
-    "10:00-10:30",
-    "10:30-11:00",
-    "11:00-11:30",
-    "11:30-12:00",
-    "12:00-12:30",
-    "12:30-13:00",
-    "13:00-13:30",
-    "13:30-14:00",
-    "14:00-14:30",
-    "14:30-15:00",
+  final List<Map> timeSlots = [
+    {"slot": "10:00 AM -10:45 AM", "slotID": 0},
+    {"slot": "11:00 AM -11:45 AM", "slotID": 1},
+    {"slot": "12:00 AM -12:45 AM", "slotID": 2},
+    {"slot": "13:00 AM -13:45  AM", "slotID": 3},
+    {"slot": "14:00 AM -14:45  AM", "slotID": 4},
+    {"slot": "15:00 AM -15:45  AM", "slotID": 5},
+    {"slot": "16:00 AM -16:45  AM", "slotID": 6},
   ];
   DateTime selectedDate = DateTime.now();
   TextEditingController dateController = TextEditingController();
   final format = DateFormat("dd/MM/yyyy");
   var index;
+  List<MentorModel> mentorList = [];
+
+  getAllMentors() async {
+    await DBService().getMentorsList().then((value) {
+      setState(() {
+        mentorList = value;
+      });
+    });
+    print("++++++++++++");
+    print(mentorList.length);
+    print(mentorList.first);
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -187,7 +199,7 @@ class _BookAppointment1State extends State<BookAppointment1> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    timeSlots[index],
+                                    "jjjj",
                                     style: TextStyle(
                                       fontSize: 15,
                                       color: inputTextColor,

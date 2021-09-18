@@ -3,10 +3,14 @@ import 'package:finalyearproject/CustomWidgets/Custombutton.dart';
 import 'package:finalyearproject/Global.dart';
 
 import 'package:finalyearproject/Screens/Student/Homepage/Home/BookAppointment/BookAppointment1.dart';
+import 'package:finalyearproject/Screens/chatScreens/chat_page.dart';
+import 'package:finalyearproject/models/mentorModel.dart';
 
 import 'package:flutter/material.dart';
 
 class DoctorDetails extends StatefulWidget {
+  final MentorModel mentor;
+  DoctorDetails({this.mentor}); 
   @override
   _DoctorDetailsState createState() => _DoctorDetailsState();
 }
@@ -29,7 +33,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
         ),
         elevation: 0,
         backgroundColor: secondaryColor,
-        title: Text('Counselor name'),
+        title: Text('${widget.mentor.jobDesc}'),
       ),
       bottomNavigationBar: CustomNavbar(index: 0, indashboard: null),
       body: SingleChildScrollView(
@@ -60,13 +64,13 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Counselor Name',
+                      Text('${widget.mentor.fullName}',
                           style: TextStyle(
                             fontSize: 20,
                             color: primaryColor,
                             fontWeight: FontWeight.bold,
                           )),
-                      Text('A short job description',
+                      Text('${widget.mentor.jobDesc}',
                           style: TextStyle(
                             fontSize: 16,
                             color: inputTextColor,
@@ -88,7 +92,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
               SizedBox(
                 height: 10,
               ),
-              Text("Short detail of Counselors' education",
+              Text("${widget.mentor.education}",
                   style: TextStyle(
                     fontSize: 15,
                     color: inputTextColor,
@@ -106,7 +110,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
               SizedBox(
                 height: 10,
               ),
-              Text("Years of education to be mentioned here.",
+              Text("${widget.mentor.experience.toString()} years",
                   style: TextStyle(
                     fontSize: 15,
                     color: inputTextColor,
@@ -124,7 +128,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
               SizedBox(
                 height: 10,
               ),
-              Text("1000 PKR/session \nsession duration is 30 minutes",
+              Text("${widget.mentor.fees} per session",
                   style: TextStyle(
                     fontSize: 15,
                     color: buttonColor,
@@ -164,6 +168,21 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => BookAppointment1()));
+                  },
+                  height: 50,
+                  width: size.width / 2,
+                ),
+              ),
+              SizedBox(height: 20,),
+               Center(
+                child: CustomButton(
+                  buttoncolor: buttonColor,
+                  title: 'Message',
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ChatPage(mentor: widget.mentor)));
                   },
                   height: 50,
                   width: size.width / 2,

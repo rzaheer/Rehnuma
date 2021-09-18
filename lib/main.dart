@@ -1,5 +1,6 @@
 import 'package:finalyearproject/Screens/Splashscreen/splashscreen.dart';
 import 'package:finalyearproject/models/user.dart';
+import 'package:finalyearproject/services/StudentProvider.dart';
 import 'package:finalyearproject/services/auth.dart';
 import 'package:finalyearproject/wrapper.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -27,6 +28,9 @@ class MyApp extends StatelessWidget {
       providers: [
         StreamProvider<AppUser>.value(
           value: AuthService().user,
+        ),
+        ChangeNotifierProvider(
+          create: (context) => StudentProvider(),
         ),
       ],
       child: MaterialApp(

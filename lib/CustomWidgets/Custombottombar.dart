@@ -4,6 +4,7 @@ import 'package:finalyearproject/Screens/Student/Homepage/Appointmentsettings/Ap
 import 'package:finalyearproject/Screens/Student/Homepage/forum/Forum.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Recommender/Recommender.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Home/Studenthome.dart';
+import 'package:finalyearproject/Screens/chatScreens/allChatsPage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -47,7 +48,7 @@ class _CustomNavbarState extends State<CustomNavbar> {
             }
             if (index == 2) {
               Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => Forum()),
+                  MaterialPageRoute(builder: (context) => ChatsPage()),
                   (Route<dynamic> route) => false);
             }
             if (index == 3 || index == 4) {
@@ -61,6 +62,11 @@ class _CustomNavbarState extends State<CustomNavbar> {
                   MaterialPageRoute(builder: (context) => AccountDetails()),
                   (Route<dynamic> route) => false);
             }
+            // if (index == 5) {
+            //   Navigator.of(context).pushAndRemoveUntil(
+            //       MaterialPageRoute(builder: (context) => ChatsPage()),
+            //       (Route<dynamic> route) => false);
+            // }
           }
         },
         items: [

@@ -1,6 +1,7 @@
 import 'package:finalyearproject/Screens/Splashscreen/Accountselection.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Home/Studenthome.dart'
     show StudentHome;
+import 'package:finalyearproject/Screens/Student/Login/Login.dart';
 import 'package:finalyearproject/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -40,7 +41,7 @@ class _WrapperState extends State<Wrapper> {
       return Loading();
     } else {
       if (user == null) {
-        return AccountSelection();
+        return StudentLogin();
       } else if (user != null) {
         // AuthService().setProvider(user, context);
         return StudentHome();
