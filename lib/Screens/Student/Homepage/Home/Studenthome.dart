@@ -1,11 +1,15 @@
+import 'dart:developer';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finalyearproject/CustomWidgets/Custombottombar.dart';
+import 'package:finalyearproject/CustomWidgets/Loading.dart';
 import 'package:finalyearproject/Global.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Home/DoctorDetails.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Home/DoctorsList.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Home/DrawerItems/FAQs.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Home/DrawerItems/Notifications.dart';
+import 'package:finalyearproject/models/STDRegistermodel.dart';
 import 'package:finalyearproject/models/mentorModel.dart';
 
 import 'package:finalyearproject/services/DBservice.dart';
@@ -48,11 +52,12 @@ class _StudentHomeState extends State<StudentHome> {
     "Psychologist"
   ];
   List<MentorModel> mentorList = [];
-
-  getAllMentors() async {
+  bool isLoading=true;
+  getAllmentorList() async {
     await DBService().getMentorsList().then((value) {
       setState(() {
         mentorList = value;
+        isLoading=false;
       });
     });
     if (mentorList.length != 0) {
@@ -65,7 +70,7 @@ class _StudentHomeState extends State<StudentHome> {
     super.initState();
     _auth = FirebaseAuth.instance; //auth iniatited
     _getCurrentUser(); //get user call
-    getAllMentors();
+    getAllmentorList();
   }
 
   _getCurrentUser() async {
@@ -84,9 +89,106 @@ class _StudentHomeState extends State<StudentHome> {
   String searchName;
   @override
   Widget build(BuildContext context) {
+    var student=Provider.of<StudentProvider>(context,listen: false);
+    print("uuuuuu");
+    print(student.currStudent.studentId);
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      body: Container(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: secondaryColor,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 20),
+            child: Icon(
+              Icons.settings,
+              color: primaryColor,
+              size: 27,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 20),
+            child: IconButton(
+              onPressed: () {
+                AuthService().signOut(context);
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => Wrapper()),
+                    (Route<dynamic> route) => false);
+              },
+              icon: Icon(Icons.star),
+            ),
+          )
+        ],
+      ),
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            UserAccountsDrawerHeader(
+              accountName: Text(
+                "Ramsha Zaheer",
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+              ),
+              accountEmail: Text("ramshazaheer@gmail.com"),
+              currentAccountPicture: CircleAvatar(
+                backgroundColor:
+                    Theme.of(context).platform == TargetPlatform.android
+                        ? secondaryColor
+                        : primaryColor,
+                child: Text(
+                  "R",
+                  style: TextStyle(fontSize: 40.0),
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('Notifications'),
+              onTap: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => Notifications()));
+              },
+            ),
+            ListTile(
+              leading: FaIcon(FontAwesomeIcons.themeco),
+              title: Text('App Theme'),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: FaIcon(FontAwesomeIcons.envelopeOpen),
+              title: Text('Invite Friends'),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: Icon(Icons.help),
+              title: Text('Help'),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: FaIcon(
+                FontAwesomeIcons.question,
+              ),
+              title: Text('FAQs'),
+              onTap: () {
+                /* Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => FAQs())); */
+              },
+            ),
+            ListTile(
+              leading: FaIcon(
+                FontAwesomeIcons.signOutAlt,
+              ),
+              title: Text('Log out'),
+              onTap: () {},
+            ),
+          ],
+        ),
+      ),
+      drawerEnableOpenDragGesture: true,
+      drawerScrimColor: primaryColor,
+      bottomNavigationBar: CustomNavbar(index: 0, indashboard: null),
+      body: isLoading?Loading() :Container(
         color: secondaryColor,
         child: ListView(
           padding: EdgeInsets.all(10),
@@ -185,7 +287,7 @@ class _StudentHomeState extends State<StudentHome> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => DoctorDetails()));
+                                builder: (context) => DoctorDetails(mentor: mentorList[index])));
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(5.0),
@@ -211,7 +313,7 @@ class _StudentHomeState extends State<StudentHome> {
                               Container(
                                 height: 50,
                                 child: Text(
-                                  item.name,
+                                  item.fullName,
                                   textAlign: TextAlign.center,
                                   maxLines: 2,
                                   style: TextStyle(
@@ -281,7 +383,7 @@ class _StudentHomeState extends State<StudentHome> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                details,
+                                mentorList[index].jobDesc,
                                 style: TextStyle(
                                   fontSize: 17,
                                   fontWeight: FontWeight.bold,
@@ -289,7 +391,7 @@ class _StudentHomeState extends State<StudentHome> {
                                 ),
                               ),
                               Text(
-                                "dUMMNY TEXT",
+                                "${mentorList[index].firstName}",
                                 style: TextStyle(
                                   fontSize: 13,
                                   fontStyle: FontStyle.italic,
@@ -301,7 +403,7 @@ class _StudentHomeState extends State<StudentHome> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    '1000 PKR',
+                                    '${mentorList[index].fees}',
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
@@ -338,7 +440,7 @@ class _StudentHomeState extends State<StudentHome> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  DoctorDetails()));
+                                                  DoctorDetails(mentor: mentorList[index],)));
                                     },
                                     child: Text(
                                       'Tap to view',
@@ -387,93 +489,9 @@ class _StudentHomeState extends State<StudentHome> {
           ],
         ),
       ),
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: primaryColor,
-        actions: [
-          /*  Padding(
-            padding: const EdgeInsets.only(right: 20),
-            child: Icon(
-              Icons.settings,
-              color: primaryColor,
-              size: 27,
-            ),
-          ), */
-        ],
-      ),
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            Consumer<StudentProvider>(builder: (_, studentProv, __) {
-              return UserAccountsDrawerHeader(
-                accountName: Text(
-                  studentProv.currStudent.firstname +
-                      " " +
-                      studentProv.currStudent.lastname,
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
-                ),
-                accountEmail: Text(_uEmail),
-                arrowColor: Colors.red,
-                currentAccountPicture: CircleAvatar(
-                  backgroundColor:
-                      Theme.of(context).platform == TargetPlatform.android
-                          ? secondaryColor
-                          : primaryColor,
-                  child: Text(
-                    getInitials(studentProv.currStudent.firstname),
-                    style: TextStyle(fontSize: 40.0),
-                  ),
-                ),
-              );
-            }),
-            ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Notifications'),
-              onTap: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => Notifications()));
-              },
-            ),
-            ListTile(
-              leading: FaIcon(FontAwesomeIcons.envelopeOpen),
-              title: Text('Invite Friends'),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: Icon(Icons.help),
-              title: Text('Help'),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: FaIcon(
-                FontAwesomeIcons.question,
-              ),
-              title: Text('FAQs'),
-              onTap: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => FAQS()));
-              },
-            ),
-            ListTile(
-              leading: FaIcon(
-                FontAwesomeIcons.signOutAlt,
-              ),
-              title: Text('Log out'),
-              onTap: () {
-                AuthService().signOut(context);
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => Wrapper()),
-                    (Route<dynamic> route) => false);
-              },
-            ),
-          ],
-        ),
-      ),
-      drawerEnableOpenDragGesture: true,
-      drawerScrimColor: primaryColor,
-      bottomNavigationBar: CustomNavbar(index: 0, indashboard: null),
+      
+      
+      
     );
   }
 }

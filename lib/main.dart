@@ -2,6 +2,7 @@ import 'package:finalyearproject/Screens/Splashscreen/splashscreen.dart';
 import 'package:finalyearproject/models/user.dart';
 import 'package:finalyearproject/services/StudentProvider.dart';
 import 'package:finalyearproject/services/auth.dart';
+import 'package:finalyearproject/wrapper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -56,7 +57,9 @@ class MyApp extends StatelessWidget {
           fontFamily: 'Poppins',
         ),
         debugShowCheckedModeBanner: false,
-        home: SplashScreen(),
+        home: SplashScreen()
+        //Wrapper()
+        //SplashScreen(),
       ),
     );
   }

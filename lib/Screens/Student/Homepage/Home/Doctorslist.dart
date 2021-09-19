@@ -28,6 +28,27 @@ class _DoctorListState extends State<DoctorList> {
     "Career advisor",
     "Psychologist"
   ];
+  List<MentorModel> mentors=[];
+  // getMentor()async{
+  //   // setState(() {
+  //   //       isLoading=true;
+  //   //     });
+  //   await DBService().getMentors().then((value) {
+  //     setState(() {
+  //             mentors=value;
+  //             //isLoading=false;
+  //           });
+  //       print("lllllllllll");    
+  //       print(mentors.length);    
+    
+  //   }
+  //   ).catchError((e){
+  //     print(e.toString());
+  //     getMentor();
+
+  //   });
+  // }
+  
 
   getAllMentors() async {
     await DBService().getMentorsList().then((value) {

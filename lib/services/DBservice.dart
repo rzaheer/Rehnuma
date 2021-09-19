@@ -131,7 +131,7 @@ class DBService {
     try {
       QuerySnapshot qs = await mentorRef.get();
       _allMentors = qs.docs
-          .map((DocumentSnapshot doc) => MentorModel.fromJson(doc.data()))
+          .map((DocumentSnapshot doc) => MentorModel.fromMap(doc.data()))
           .toList();
       print("Length of mentors: ");
       print(_allMentors.length);
