@@ -22,10 +22,11 @@ class _PaymentMethodState extends State<PaymentMethod> {
         context: context,
         builder: (BuildContext context) {
           return CustomDialog(
+              buttonText: "OK",
               titleString: 'Appointment booked!',
               contentString:
                   " Your appointment confirmation and details will be sent to you via Email",
-              okFunction: () {
+              button1Function: () {
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
                         builder: (context) => StudentAppointments()),
@@ -130,7 +131,9 @@ class _PaymentMethodState extends State<PaymentMethod> {
               child: CustomButton(
                 buttoncolor: buttonColor,
                 title: 'DONE',
-                onPressed: () {},
+                onPressed: () {
+                  _showDialog();
+                },
                 height: 44,
                 width: size.width / 3,
               ),

@@ -52,12 +52,25 @@ class _StudentHomeState extends State<StudentHome> {
     "Psychologist"
   ];
   List<MentorModel> mentorList = [];
-  bool isLoading=true;
+  bool isLoading = true;
+
+  getRatingRow(String rating) {
+    List<Widget> row = List();
+    for (int i = 0; i < 5; i++) {
+      row.add(Icon(
+        Icons.star,
+        color: Colors.green,
+        size: 16,
+      ));
+    }
+  }
+
+  var i;
   getAllmentorList() async {
     await DBService().getMentorsList().then((value) {
       setState(() {
         mentorList = value;
-        isLoading=false;
+        isLoading = false;
       });
     });
     if (mentorList.length != 0) {
@@ -89,20 +102,21 @@ class _StudentHomeState extends State<StudentHome> {
   String searchName;
   @override
   Widget build(BuildContext context) {
-    var student=Provider.of<StudentProvider>(context,listen: false);
+    var student = Provider.of<StudentProvider>(context, listen: false);
     print("uuuuuu");
     print(student.currStudent.studentId);
     var size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: secondaryColor,
+        backgroundColor: primaryColor,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 20),
             child: Icon(
               Icons.settings,
-              color: primaryColor,
+              color: secondaryColor,
               size: 27,
             ),
           ),
@@ -123,25 +137,28 @@ class _StudentHomeState extends State<StudentHome> {
       drawer: Drawer(
         child: ListView(
           children: [
-            UserAccountsDrawerHeader(
-              accountName: Text(
-                "Ramsha Zaheer",
-                style: TextStyle(
-                  fontSize: 20,
+            Consumer<StudentProvider>(builder: (_, studentProv, __) {
+              return UserAccountsDrawerHeader(
+                accountName: Text(
+                  studentProv.currStudent.firstname +
+                      studentProv.currStudent.lastname,
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
                 ),
-              ),
-              accountEmail: Text("ramshazaheer@gmail.com"),
-              currentAccountPicture: CircleAvatar(
-                backgroundColor:
-                    Theme.of(context).platform == TargetPlatform.android
-                        ? secondaryColor
-                        : primaryColor,
-                child: Text(
-                  "R",
-                  style: TextStyle(fontSize: 40.0),
+                accountEmail: Text(studentProv.currStudent.email),
+                currentAccountPicture: CircleAvatar(
+                  backgroundColor:
+                      Theme.of(context).platform == TargetPlatform.android
+                          ? secondaryColor
+                          : primaryColor,
+                  child: Text(
+                    getInitials(studentProv.currStudent.firstname),
+                    style: TextStyle(fontSize: 40.0),
+                  ),
                 ),
-              ),
-            ),
+              );
+            }),
             ListTile(
               leading: Icon(Icons.settings),
               title: Text('Notifications'),
@@ -149,11 +166,6 @@ class _StudentHomeState extends State<StudentHome> {
                 Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => Notifications()));
               },
-            ),
-            ListTile(
-              leading: FaIcon(FontAwesomeIcons.themeco),
-              title: Text('App Theme'),
-              onTap: () {},
             ),
             ListTile(
               leading: FaIcon(FontAwesomeIcons.envelopeOpen),
@@ -171,8 +183,8 @@ class _StudentHomeState extends State<StudentHome> {
               ),
               title: Text('FAQs'),
               onTap: () {
-                /* Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => FAQs())); */
+                // Navigator.of(context)
+                //  .push(MaterialPageRoute(builder: (context) => FAQs()));//
               },
             ),
             ListTile(
@@ -180,7 +192,12 @@ class _StudentHomeState extends State<StudentHome> {
                 FontAwesomeIcons.signOutAlt,
               ),
               title: Text('Log out'),
-              onTap: () {},
+              onTap: () {
+                AuthService().signOut(context);
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => Wrapper()),
+                    (Route<dynamic> route) => false);
+              },
             ),
           ],
         ),
@@ -188,79 +205,81 @@ class _StudentHomeState extends State<StudentHome> {
       drawerEnableOpenDragGesture: true,
       drawerScrimColor: primaryColor,
       bottomNavigationBar: CustomNavbar(index: 0, indashboard: null),
-      body: isLoading?Loading() :Container(
-        color: secondaryColor,
-        child: ListView(
-          padding: EdgeInsets.all(10),
-          primary: true,
-          shrinkWrap: true,
-          scrollDirection: Axis.vertical,
-          children: [
-            RaisedButton(onPressed: () async {
-              DBService().getStudentByUid("mDa9GL1hUSX9IPbXFc4AeaDgAc52");
-            }),
-            Text(
-              "Get the best career suggestions with our experts' guidance!",
-              maxLines: 2,
-              style: TextStyle(
-                fontSize: 19,
-                fontWeight: FontWeight.bold,
-                color: primaryColor,
-              ),
-            ),
-            SizedBox(height: 10),
-
-            CarouselSlider(
-              items: [
-                //1st Image of Slider
-                Container(
-                  margin: EdgeInsets.all(6.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
-                    image: DecorationImage(
-                      image: AssetImage('assets/images/banner1.png'),
-                      fit: BoxFit.fill,
+      body: isLoading
+          ? Loading()
+          : Container(
+              color: secondaryColor,
+              child: ListView(
+                padding: EdgeInsets.all(10),
+                primary: true,
+                shrinkWrap: true,
+                scrollDirection: Axis.vertical,
+                children: [
+                  /* RaisedButton(onPressed: () async {
+                    DBService().getStudentByUid("mDa9GL1hUSX9IPbXFc4AeaDgAc52");
+                  }), */
+                  Text(
+                    "Get the best career suggestions with our experts' guidance!",
+                    maxLines: 2,
+                    style: TextStyle(
+                      fontSize: 19,
+                      fontWeight: FontWeight.bold,
+                      color: primaryColor,
                     ),
                   ),
-                ),
-                //2nd Image of Slider
-                Container(
-                  margin: EdgeInsets.all(6.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
-                    image: DecorationImage(
-                      image: AssetImage('assets/images/banner2.png'),
-                      fit: BoxFit.fill,
+                  SizedBox(height: 10),
+
+                  CarouselSlider(
+                    items: [
+                      //1st Image of Slider
+                      Container(
+                        margin: EdgeInsets.all(6.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8.0),
+                          image: DecorationImage(
+                            image: AssetImage('assets/images/banner1.png'),
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                      ),
+                      //2nd Image of Slider
+                      Container(
+                        margin: EdgeInsets.all(6.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8.0),
+                          image: DecorationImage(
+                            image: AssetImage('assets/images/banner2.png'),
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                      ),
+                    ],
+
+                    //Slider Container properties
+                    options: CarouselOptions(
+                      autoPlay: true,
+                      aspectRatio: 2,
+                      autoPlayCurve: Curves.easeInOut,
+                      enableInfiniteScroll: true,
+                      autoPlayAnimationDuration: Duration(milliseconds: 500),
+                      viewportFraction: 1,
                     ),
                   ),
-                ),
-              ],
+                  //,,,,,,,,,,,,,
 
-              //Slider Container properties
-              options: CarouselOptions(
-                autoPlay: true,
-                aspectRatio: 2,
-                autoPlayCurve: Curves.easeInOut,
-                enableInfiniteScroll: true,
-                autoPlayAnimationDuration: Duration(milliseconds: 500),
-                viewportFraction: 1,
-              ),
-            ),
-            //,,,,,,,,,,,,,
+                  SizedBox(height: 20),
+                  Text(
+                    "TOP PICKS OF THE MONTH",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                      color: inputTextColor,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  //Top picks wala
 
-            SizedBox(height: 20),
-            Text(
-              "TOP PICKS OF THE MONTH",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w800,
-                color: inputTextColor,
-              ),
-            ),
-            SizedBox(height: 10),
-            //Top picks wala
-
-            /*     Firestore.instance.collection('DriverList').snapshots(),
+                  /*     Firestore.instance.collection('DriverList').snapshots(),
   builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
     if (!snapshot.hasData) return new Text('Loading...');
     return new ListView(
@@ -273,225 +292,235 @@ class _StudentHomeState extends State<StudentHome> {
     );
   },
 ); */
-            Container(
-              height: size.height / 5,
-              child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  shrinkWrap: true,
-                  primary: false,
-                  itemCount: mentorList.length,
-                  itemBuilder: (context, index) {
-                    final item = mentorList[index];
-                    return InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => DoctorDetails(mentor: mentorList[index])));
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Container(
-                          width: size.width / 3.5,
-                          height: size.height / 4.5,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.teal[50],
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                height: 60,
-                                width: 60,
-                                child: Image.asset(
-                                  'assets/images/counselor.png',
-                                  fit: BoxFit.cover,
+                  Container(
+                    height: size.height / 5.1,
+                    child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        primary: false,
+                        itemCount: mentorList.length,
+                        itemBuilder: (context, index) {
+                          final item = mentorList[index];
+                          return InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => DoctorDetails(
+                                          mentor: mentorList[index])));
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Container(
+                                width: size.width / 3.5,
+                                height: size.height / 4.5,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.teal[50],
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      height: 50,
+                                      width: 50,
+                                      child: mentorList[index].gender == 'Male'
+                                          ? Image.asset(
+                                              'assets/images/counselor.png',
+                                              fit: BoxFit.fill,
+                                            )
+                                          : Image.asset(
+                                              'assets/images/femaledoc.png',
+                                              fit: BoxFit.fill,
+                                            ),
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.only(top: 15),
+                                      height: 50,
+                                      child: Text(
+                                        mentorList[index].fullName,
+                                        textAlign: TextAlign.center,
+                                        maxLines: 2,
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                          color: inputTextColor,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    )
+                                  ],
                                 ),
                               ),
-                              Container(
-                                height: 50,
-                                child: Text(
-                                  item.fullName,
-                                  textAlign: TextAlign.center,
-                                  maxLines: 2,
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    color: inputTextColor,
-                                    fontWeight: FontWeight.bold,
+                            ),
+                          );
+                        }),
+                  ), //Top picks wala
+                  SizedBox(height: 20),
+                  Text(
+                    "ALL COUNSELORS",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                      color: inputTextColor,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  ListView.builder(
+                      primary: false,
+                      shrinkWrap: true,
+                      itemCount: mentorList.length,
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => DoctorDetails(
+                                          mentor: mentorList[index],
+                                        )));
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.teal[50],
+                              ),
+                              height: size.height / 5.5,
+                              width: size.width / 1.3,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    width: 20,
                                   ),
-                                ),
-                              )
-                            ],
+                                  Container(
+                                    //color: primaryColor,
+                                    height: 70,
+                                    width: 70,
+                                    child: mentorList[index].gender == 'Male'
+                                        ? Image.asset(
+                                            'assets/images/counselor.png',
+                                            fit: BoxFit.fill,
+                                          )
+                                        : Image.asset(
+                                            'assets/images/femaledoc.png',
+                                            fit: BoxFit.fill,
+                                          ),
+                                    /* Icon(
+                                        Icons.account_box,
+                                        color: secondaryColor,
+                                        size: 80,
+                                      ) */
+                                  ),
+                                  SizedBox(
+                                    width: 30,
+                                  ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "${mentorList[index].fullName}",
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold,
+                                          color: inputTextColor,
+                                        ),
+                                      ),
+                                      Text(
+                                        mentorList[index].jobDesc,
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          fontStyle: FontStyle.italic,
+                                          color: inputTextColor,
+                                        ),
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            '${mentorList[index].fees}',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: buttonColor,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Container(
+                                        child: getRatingRow(mentorList[index]
+                                            .ratings
+                                            .toString()),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      /* Container(
+                                        height: 25,
+                                        width: 120,
+                                        // color: Colors.teal,
+                                        child: FlatButton(
+                                            onPressed: () {},
+                                            child: Text(
+                                              'Tap to view',
+                                              style: TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.grey[800],
+                                              ),
+                                            )),
+                                      ), */
+
+                                      /*  Positioned(
+                                    bottom: 0,
+                                    left: 10,
+                                    child: CircleAvatar(
+                                      backgroundColor: Colors.grey,
+                                      radius: 20,
+                                    )) */
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    );
-                  }),
-            ), //Top picks wala
-            SizedBox(height: 20),
-            Text(
-              "ALL COUNSELORS",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w800,
-                color: inputTextColor,
+                        );
+                      }),
+                  Center(
+                    child: FlatButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => DoctorList()));
+                        },
+                        child: Row(
+                          children: [
+                            Text(
+                              'See more ',
+                              style: TextStyle(
+                                  color: inputTextColor, fontSize: 16),
+                            ),
+                            Icon(
+                              Icons.arrow_forward_ios,
+                              color: inputTextColor,
+                              size: 16,
+                            )
+                          ],
+                        )),
+                  )
+                ],
               ),
             ),
-            SizedBox(
-              height: 10,
-            ),
-            ListView.builder(
-                primary: false,
-                shrinkWrap: true,
-                itemCount: mentorList.length,
-                scrollDirection: Axis.vertical,
-                itemBuilder: (context, index) {
-                  final professions = mentorList[index];
-                  final details = counselorname[index];
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.teal[50],
-                      ),
-                      height: size.height / 5.5,
-                      width: size.width / 1.3,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Container(
-                              color: primaryColor,
-                              height: 100,
-                              width: 100,
-                              child: Icon(
-                                Icons.account_box,
-                                color: primaryColor,
-                                size: 80,
-                              )),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                mentorList[index].jobDesc,
-                                style: TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.bold,
-                                  color: inputTextColor,
-                                ),
-                              ),
-                              Text(
-                                "${mentorList[index].firstName}",
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontStyle: FontStyle.italic,
-                                  color: inputTextColor,
-                                ),
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    '${mentorList[index].fees}',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: buttonColor,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Icon(Icons.star,
-                                      size: 16, color: Colors.green),
-                                  Icon(Icons.star,
-                                      size: 16, color: Colors.green),
-                                  Icon(Icons.star,
-                                      size: 16, color: Colors.green),
-                                  Icon(Icons.star,
-                                      size: 16, color: Colors.green),
-                                  Icon(Icons.star_half,
-                                      size: 16, color: Colors.green),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Container(
-                                height: 25,
-                                width: 120,
-                                // color: Colors.teal,
-                                child: FlatButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  DoctorDetails(mentor: mentorList[index],)));
-                                    },
-                                    child: Text(
-                                      'Tap to view',
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.grey[800],
-                                      ),
-                                    )),
-                              ),
-
-                              /*  Positioned(
-                                  bottom: 0,
-                                  left: 10,
-                                  child: CircleAvatar(
-                                    backgroundColor: Colors.grey,
-                                    radius: 20,
-                                  )) */
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                }),
-            Center(
-              child: FlatButton(
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => DoctorList()));
-                  },
-                  child: Row(
-                    children: [
-                      Text(
-                        'See more ',
-                        style: TextStyle(color: inputTextColor, fontSize: 16),
-                      ),
-                      Icon(
-                        Icons.arrow_forward_ios,
-                        color: inputTextColor,
-                        size: 16,
-                      )
-                    ],
-                  )),
-            )
-          ],
-        ),
-      ),
-      
-      
-      
     );
   }
 }

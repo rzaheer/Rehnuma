@@ -50,9 +50,10 @@ class _StudentRegister5State extends State<StudentRegister5> {
   void ShowDialog() {
     if (register == true) {
       CustomDialog(
+        buttonText: 'OK',
         contentString: 'Lets log into your account now.',
         titleString: "Welcome, ${currStudentModel.firstname}",
-        okFunction: () {
+        button1Function: () {
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(builder: (context) => Wrapper()),
               (Route<dynamic> route) => false);
@@ -166,22 +167,22 @@ class _StudentRegister5State extends State<StudentRegister5> {
                                 educationlevel: currStudentModel.educationlevel,
                                 fieldOfEducation:
                                     currStudentModel.fieldOfEducation,
-                         
                               );
                               await AuthService()
-                                  .registerWithEmailAndPassword(
-                                      _studentModel,passwordController.text, context)
+                                  .registerWithEmailAndPassword(_studentModel,
+                                      passwordController.text, context)
                                   .then((value) {
                                 if (value == true) {
                                   showDialog(
                                       context: context,
                                       builder: (BuildContext dialogContext) {
                                         return CustomDialog(
+                                            buttonText: 'OK',
                                             contentString:
                                                 'You have successfully registered on Rehnuma, Lets start this journey~',
                                             titleString:
                                                 "Welcome, ${currStudentModel.firstname}😊",
-                                            okFunction: () {
+                                            button1Function: () {
                                               Navigator.of(context)
                                                   .pushAndRemoveUntil(
                                                       MaterialPageRoute(

@@ -1,13 +1,13 @@
 class SlotModel {
   final String slotId, day;
   final List mentorId;
-  final DateTime startTime, endTime;
+  final DateTime timeSlot, endTime;
   SlotModel(
-      {this.slotId, this.day, this.mentorId, this.endTime, this.startTime});
+      {this.slotId, this.day, this.mentorId, this.endTime, this.timeSlot});
   factory SlotModel.fromMap(Map<String, dynamic> json) => SlotModel(
       slotId: json["slotId"],
       day: json["day"],
       mentorId: json["mentorId"],
-      startTime: json["startTime"].toDate(),
+      timeSlot: json["timeSlot"].toDate(),
       endTime: json["endTime"].toDate());
 }

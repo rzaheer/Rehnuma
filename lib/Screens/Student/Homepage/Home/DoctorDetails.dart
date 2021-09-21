@@ -10,12 +10,13 @@ import 'package:flutter/material.dart';
 
 class DoctorDetails extends StatefulWidget {
   final MentorModel mentor;
-  DoctorDetails({this.mentor}); 
+  DoctorDetails({this.mentor});
   @override
   _DoctorDetailsState createState() => _DoctorDetailsState();
 }
 
 class _DoctorDetailsState extends State<DoctorDetails> {
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -49,14 +50,15 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                 children: [
                   //Profile picture
                   Container(
+                    color: primaryColor,
+                    height: 100,
+                    width: 100,
+                    child: Icon(
+                      Icons.account_box,
                       color: primaryColor,
-                      height: 100,
-                      width: 100,
-                      child: Icon(
-                        Icons.account_box,
-                        color: primaryColor,
-                        size: 50,
-                      )),
+                      size: 50,
+                    ),
+                  ),
                   SizedBox(
                     width: 15,
                   ),
@@ -110,7 +112,8 @@ class _DoctorDetailsState extends State<DoctorDetails> {
               SizedBox(
                 height: 10,
               ),
-              Text("${widget.mentor.experience.toString()} years",
+              Text(
+                  "${widget.mentor.experience.toString()} years in the professional industry",
                   style: TextStyle(
                     fontSize: 15,
                     color: inputTextColor,
@@ -167,14 +170,17 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => BookAppointment1()));
+                            builder: (context) =>
+                                BookAppointment1(mentor: widget.mentor)));
                   },
                   height: 50,
                   width: size.width / 2,
                 ),
               ),
-              SizedBox(height: 20,),
-               Center(
+              SizedBox(
+                height: 20,
+              ),
+              Center(
                 child: CustomButton(
                   buttoncolor: buttonColor,
                   title: 'Message',
@@ -182,7 +188,8 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ChatPage(mentor: widget.mentor)));
+                            builder: (context) =>
+                                ChatPage(mentor: widget.mentor)));
                   },
                   height: 50,
                   width: size.width / 2,

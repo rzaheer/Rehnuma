@@ -28,7 +28,7 @@ class _DoctorListState extends State<DoctorList> {
     "Career advisor",
     "Psychologist"
   ];
-  List<MentorModel> mentors=[];
+  List<MentorModel> mentors = [];
   // getMentor()async{
   //   // setState(() {
   //   //       isLoading=true;
@@ -38,9 +38,9 @@ class _DoctorListState extends State<DoctorList> {
   //             mentors=value;
   //             //isLoading=false;
   //           });
-  //       print("lllllllllll");    
-  //       print(mentors.length);    
-    
+  //       print("lllllllllll");
+  //       print(mentors.length);
+
   //   }
   //   ).catchError((e){
   //     print(e.toString());
@@ -48,7 +48,6 @@ class _DoctorListState extends State<DoctorList> {
 
   //   });
   // }
-  
 
   getAllMentors() async {
     await DBService().getMentorsList().then((value) {
@@ -269,7 +268,9 @@ class _DoctorListState extends State<DoctorList> {
                                     SizedBox(
                                       height: 10,
                                     ),
-                                    Container(
+
+                                    /// no need for this tap to view
+                                    /*  Container(
                                       height: 25,
                                       width: 120,
                                       child: FlatButton(
@@ -282,7 +283,7 @@ class _DoctorListState extends State<DoctorList> {
                                               color: Colors.grey[800],
                                             ),
                                           )),
-                                    ),
+                                    ), */
 
                                     /*  Positioned(
                                         bottom: 0,
