@@ -6,6 +6,7 @@ class StudentProvider extends ChangeNotifier {
 
   setCurrentStudent(StudentModel studentModel) {
     currStudent = studentModel;
+    print("Current student is set to ${currStudent.firstname}");
     notifyListeners();
   }
 }

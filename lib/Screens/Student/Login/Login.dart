@@ -179,12 +179,7 @@ class _StudentLoginState extends State<StudentLogin> {
                                     dynamic result =
                                         await _auth.signInEmailPass(
                                             email, password, context);
-                                    if (result == null) {
-                                      setState(() {
-                                        CustomToast().showerrorToast(
-                                            'Incorrect credentials, please try again.');
-                                      });
-                                    } else {
+                                    if (result != null) {
                                       setState(() {
                                         loading = true;
                                         Navigator.push(

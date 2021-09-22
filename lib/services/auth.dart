@@ -38,10 +38,10 @@ class AuthService {
           StudentProvider studentProvider =
               Provider.of<StudentProvider>(context, listen: false);
           studentProvider.setCurrentStudent(student);
+          CustomToast().showsuccessToast("Login successful");
         });
       }
 
-      CustomToast().showsuccessToast("Login successful");
       return userCreds;
     } on FirebaseAuthException catch (error) {
       print("firebase aUTH eXCePTION ayaaaa hai");
@@ -54,16 +54,18 @@ class AuthService {
         CustomToast().showerrorToast('Network error occured');
       } else if (error.code == 'invalid-email') {
         CustomToast().showerrorToast('Invalid Email');
+      } else if (error.code == 'wrong-password') {
+        CustomToast().showerrorToast(error.message);
       } else {
         CustomToast().showerrorToast('Oops, an error has occured');
       }
       print(error.toString());
-      return error.message;
+      return null;
     } on PlatformException catch (error) {
       print("Platform Exception");
       CustomToast().showerrorToast('Oops, an error has occured');
       print(error.toString());
-      return error.message;
+      return null;
     }
   }
 
@@ -92,7 +94,13 @@ class AuthService {
         await students
             .doc(result.user.uid)
             .set(newStudent.toJson())
-            .whenComplete(() {});
+            .then((value) async {
+          await DBService().getStudentByUid(result.user.uid).then((student) {
+            StudentProvider studentProvider =
+                Provider.of<StudentProvider>(context, listen: false);
+            studentProvider.setCurrentStudent(student);
+          });
+        });
 
         return true;
       } else {

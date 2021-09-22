@@ -102,9 +102,6 @@ class _StudentHomeState extends State<StudentHome> {
   String searchName;
   @override
   Widget build(BuildContext context) {
-    var student = Provider.of<StudentProvider>(context, listen: false);
-    print("uuuuuu");
-    print(student.currStudent.studentId);
     var size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -215,9 +212,15 @@ class _StudentHomeState extends State<StudentHome> {
                 shrinkWrap: true,
                 scrollDirection: Axis.vertical,
                 children: [
-                  /* RaisedButton(onPressed: () async {
-                    DBService().getStudentByUid("mDa9GL1hUSX9IPbXFc4AeaDgAc52");
-                  }), */
+                  RaisedButton(onPressed: () async {
+                    var p =
+                        Provider.of<StudentProvider>(context, listen: false);
+                    if (p.currStudent == null) {
+                      print("Its null");
+                    } else {
+                      print("not null");
+                    }
+                  }),
                   Text(
                     "Get the best career suggestions with our experts' guidance!",
                     maxLines: 2,

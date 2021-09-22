@@ -180,8 +180,10 @@ class _StudentRegister5State extends State<StudentRegister5> {
                                             buttonText: 'OK',
                                             contentString:
                                                 'You have successfully registered on Rehnuma, Lets start this journey~',
-                                            titleString:
-                                                "Welcome, ${currStudentModel.firstname}😊",
+                                            titleString: currStudentModel !=
+                                                    null
+                                                ? "Welcome, ${currStudentModel.firstname}😊"
+                                                : "",
                                             button1Function: () {
                                               Navigator.of(context)
                                                   .pushAndRemoveUntil(
