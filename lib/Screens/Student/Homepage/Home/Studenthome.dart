@@ -87,7 +87,7 @@ class _StudentHomeState extends State<StudentHome> {
   }
 
   _getCurrentUser() async {
-    mCurrentUser = await _auth.currentUser;
+    mCurrentUser = _auth.currentUser;
     DocumentSnapshot item = await FirebaseFirestore.instance
         .collection("Students")
         .doc(mCurrentUser.uid)

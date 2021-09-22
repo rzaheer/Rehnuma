@@ -173,7 +173,7 @@ class _StudentRegister5State extends State<StudentRegister5> {
                                       passwordController.text, context)
                                   .then((value) {
                                 if (value == true) {
-                                  showDialog(
+                                  /* showDialog(
                                       context: context,
                                       builder: (BuildContext dialogContext) {
                                         return CustomDialog(
@@ -191,22 +191,11 @@ class _StudentRegister5State extends State<StudentRegister5> {
                                                       (Route<dynamic> route) =>
                                                           false);
                                             });
-                                      });
-
-                                  /*  CustomDialog(
-                                      titleString:
-                                          "Welcome, ${currStudentModel.firstname}",
-                                      contentString:
-                                          'Lets log into your account now.',
-                                      okFunction: () {
-                                        Navigator.of(context)
-                                            .pushAndRemoveUntil(
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        Wrapper()),
-                                                (Route<dynamic> route) =>
-                                                    false);
                                       }); */
+                                  Navigator.of(context).pushAndRemoveUntil(
+                                      MaterialPageRoute(
+                                          builder: (context) => StudentHome()),
+                                      (Route<dynamic> route) => false);
                                 } else {
                                   CustomToast().showerrorToast(
                                       "Email address is associated with another account");
