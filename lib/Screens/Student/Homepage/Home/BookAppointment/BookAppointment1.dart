@@ -1,14 +1,21 @@
+import 'dart:math';
+
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:finalyearproject/CustomWidgets/Custombottombar.dart';
 import 'package:finalyearproject/CustomWidgets/Custombutton.dart';
+import 'package:finalyearproject/CustomWidgets/Customtoast.dart';
 import 'package:finalyearproject/Global.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Home/BookAppointment/Payment.dart';
+import 'package:finalyearproject/models/AppointmentModel.dart';
 import 'package:finalyearproject/models/mentorModel.dart';
 import 'package:finalyearproject/models/slotModel.dart';
 import 'package:finalyearproject/services/DBservice.dart';
+import 'package:finalyearproject/services/StudentProvider.dart';
+import 'package:finalyearproject/services/sharedFunctions.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class BookAppointment1 extends StatefulWidget {
   final MentorModel mentor;
@@ -18,7 +25,7 @@ class BookAppointment1 extends StatefulWidget {
 }
 
 class _BookAppointment1State extends State<BookAppointment1> {
-  int selectedIndex;
+  SlotModel selectedSlot;
   final List<Map> timeSlots = [
     {"slot": "10:00 AM -10:45 AM", "slotID": 0},
     {"slot": "11:00 AM -11:45 AM", "slotID": 1},
@@ -32,6 +39,7 @@ class _BookAppointment1State extends State<BookAppointment1> {
   var index;
   List<MentorModel> mentorList = [];
   List<SlotModel> slotList = [], mentorSlots = [];
+  List<SlotModel> filteredSlots = [];
   final _formKey = GlobalKey<FormState>();
 
   /////
@@ -48,25 +56,17 @@ class _BookAppointment1State extends State<BookAppointment1> {
         mentorList = value;
       });
     });
-    print("++++++++++++");
-    print(mentorList.length);
-    print(mentorList.first);
   }
 
   //Slot get call
   getAllSlots() async {
-    await DBService().getSlotsList().then((value) {
-      if (slotList.length != null) {
-        if (slotList[index].mentorId == widget.mentor) {}
-      }
+    await DBService().getSlotsListBySlotIds(widget.mentor.slots).then((value) {
+      print(value.length);
 
       setState(() {
         slotList = value;
       });
     });
-    print("++++++++++++");
-    print(slotList.length);
-    print(slotList.first);
   }
 
   @override
@@ -76,10 +76,7 @@ class _BookAppointment1State extends State<BookAppointment1> {
     setState(() {
       currMentor = widget.mentor;
     });
-
-    print(currYear + 1);
-    print(currMonth);
-    print(currDay);
+    getAllSlots();
   }
 
   @override
@@ -159,7 +156,20 @@ class _BookAppointment1State extends State<BookAppointment1> {
                               onChanged: (value) {
                                 setState(() {
                                   selectedDate = value;
+                                  selectedSlot = null;
                                 });
+                                List<SlotModel> temp = [];
+                                slotList.forEach((element) {
+                                  if (element.startTime.weekday ==
+                                      selectedDate.weekday) {
+                                    temp.add(element);
+                                  }
+                                });
+                                setState(() {
+                                  filteredSlots.clear();
+                                  filteredSlots.addAll(temp);
+                                });
+                                print(filteredSlots.length);
                               },
                               style: TextStyle(
                                   fontSize: 15,
@@ -217,49 +227,62 @@ class _BookAppointment1State extends State<BookAppointment1> {
                   Container(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height / 3,
-                    child: GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          childAspectRatio: 3,
-                          mainAxisSpacing: 8,
-                          crossAxisSpacing: 6,
-                        ),
-                        //itemCount: slo,
-                        itemBuilder: (BuildContext context, int index) {
-                          return SizedBox(
-                            height: 45,
-                            width: MediaQuery.of(context).size.width / 2.3,
-                            child: InkWell(
-                              onTap: () {
-                                setState(() {
-                                  selectedIndex = index;
-                                });
-                              },
-                              child: Card(
-                                color: selectedIndex == index
-                                    ? Colors.teal[100]
-                                    : secondaryColor,
-                                shape: RoundedRectangleBorder(
-                                    side: BorderSide(
-                                        width: 1, color: primaryColor),
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "jjjj",
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        color: inputTextColor,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
-                                ),
-                              ),
+                    child: filteredSlots.length == 0
+                        ? Center(
+                            child: Text(
+                              "No slots available.\nPlease select another date from the calender",
+                              textAlign: TextAlign.center,
                             ),
-                          );
-                        }),
+                          )
+                        : GridView.builder(
+                            itemCount: filteredSlots.length,
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              childAspectRatio: 3,
+                              mainAxisSpacing: 8,
+                              crossAxisSpacing: 6,
+                            ),
+                            //itemCount: slo,
+                            itemBuilder: (BuildContext context, int i) {
+                              return SizedBox(
+                                child: InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      selectedSlot = slotList[i];
+                                    });
+                                  },
+                                  child: Card(
+                                    color: selectedSlot == slotList[i]
+                                        ? Colors.teal[100]
+                                        : secondaryColor,
+                                    shape: RoundedRectangleBorder(
+                                        side: BorderSide(
+                                            width: 1, color: primaryColor),
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          formatTime12Hr(
+                                                  slotList[i].startTime) +
+                                              "-" +
+                                              formatTime12Hr(
+                                                  slotList[i].endTime),
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            color: inputTextColor,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }),
                   ),
                   SizedBox(
                     height: 10,
@@ -268,19 +291,34 @@ class _BookAppointment1State extends State<BookAppointment1> {
                     child: CustomButton(
                       buttoncolor: buttonColor,
                       title: 'NEXT',
-                      onPressed: () {
-                        if (_formKey.currentState.validate()) {
-                          SlotModel currSlot = SlotModel(
-                            day: dateController.text,
-                            // timeSlot: timeController,
-                            // mentorId: widget.mentor.mentorId
-                            //  slotId:
-                          );
+                      onPressed: () async {
+                        if (selectedDate != null) {
+                          Random random = new Random();
+                          int randomNumber = random.nextInt(1000);
+                          StudentProvider prov = Provider.of<StudentProvider>(
+                              context,
+                              listen: false);
+                          AppointmentModel appointment = AppointmentModel(
+                              appointmentId: randomNumber.toString(),
+                              mentorId: widget.mentor.mentorId,
+                              startTime: selectedSlot.startTime,
+                              endTime: selectedSlot.endTime,
+                              slotId: selectedSlot.slotId,
+                              isCompleted: false,
+                              studentId: prov.currStudent.studentId);
+                          await DBService()
+                              .postAppointment(appointment)
+                              .then((success) {
+                            if (success) {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => PaymentMethod()));
+                            } else {
+                              CustomToast().showerrorToast("An error occured");
+                            }
+                          });
                         }
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => PaymentMethod()));
                       },
                       height: 44,
                       width: size.width / 3,

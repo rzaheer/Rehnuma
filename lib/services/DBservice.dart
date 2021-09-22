@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finalyearproject/Global.dart';
+import 'package:finalyearproject/models/AppointmentModel.dart';
 import 'package:finalyearproject/models/STDRegistermodel.dart';
 import 'package:finalyearproject/models/UniversityModel.dart';
 import 'package:finalyearproject/models/mentorModel.dart';
@@ -13,6 +14,8 @@ class DBService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   CollectionReference studentCollection =
       FirebaseFirestore.instance.collection('Students');
+  CollectionReference appointmentCol =
+      FirebaseFirestore.instance.collection('Appointments');
   /* Future<List<UniversityModel>> getData(String uni) async {
     List<UniversityModel> _allUnis = [];
     //url for recommender
@@ -159,6 +162,23 @@ class DBService {
     }
   }
 
+  Future<List<SlotModel>> getSlotsListBySlotIds(List slotIds) async {
+    CollectionReference slotRef = _db.collection('Slots');
+
+    List<SlotModel> _allSlots = [];
+    try {
+      QuerySnapshot qs = await slotRef.where("slotId", whereIn: slotIds).get();
+      _allSlots = qs.docs
+          .map((DocumentSnapshot doc) => SlotModel.fromMap(doc.data()))
+          .toList();
+
+      return _allSlots;
+    } catch (e) {
+      print("Error in mentor get list: " + e.toString());
+      return _allSlots;
+    }
+  }
+
   ////////////////////
   Future<StudentModel> getStudentByUid(String uid) async {
     try {
@@ -173,6 +193,20 @@ class DBService {
     } catch (e) {
       print("Error: " + e.toString());
       return null;
+    }
+  }
+
+  Future<bool> postAppointment(AppointmentModel appointment) async {
+    try {
+      return await appointmentCol
+          .doc(appointment.appointmentId)
+          .set(appointment.toJson())
+          .then((value) {
+        return true;
+      });
+    } catch (e) {
+      print("Error: " + e.toString());
+      return false;
     }
   }
 }
