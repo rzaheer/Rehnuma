@@ -109,15 +109,15 @@ class _StudentHomeState extends State<StudentHome> {
         elevation: 0,
         backgroundColor: primaryColor,
         actions: [
-          Padding(
+          /* Padding(
             padding: const EdgeInsets.only(right: 20),
             child: Icon(
               Icons.settings,
               color: secondaryColor,
               size: 27,
             ),
-          ),
-          Padding(
+          ), */
+          /*  Padding(
             padding: const EdgeInsets.only(right: 20),
             child: IconButton(
               onPressed: () {
@@ -128,7 +128,7 @@ class _StudentHomeState extends State<StudentHome> {
               },
               icon: Icon(Icons.star),
             ),
-          )
+          ) */
         ],
       ),
       drawer: Drawer(
@@ -212,7 +212,8 @@ class _StudentHomeState extends State<StudentHome> {
                 shrinkWrap: true,
                 scrollDirection: Axis.vertical,
                 children: [
-                  RaisedButton(onPressed: () async {
+                  /* RaisedButton(
+                    onPressed: () async {
                     var p =
                         Provider.of<StudentProvider>(context, listen: false);
                     if (p.currStudent == null) {
@@ -220,7 +221,7 @@ class _StudentHomeState extends State<StudentHome> {
                     } else {
                       print("not null");
                     }
-                  }),
+                  }), */
                   Text(
                     "Get the best career suggestions with our experts' guidance!",
                     maxLines: 2,

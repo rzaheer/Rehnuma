@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finalyearproject/CustomWidgets/Custombottombar.dart';
 import 'package:finalyearproject/Global.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Home/DoctorDetails.dart';
 import 'package:finalyearproject/models/mentorModel.dart';
 import 'package:finalyearproject/services/DBservice.dart';
 import 'package:finalyearproject/services/bookingservice.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -14,6 +16,13 @@ class DoctorList extends StatefulWidget {
 
 class _DoctorListState extends State<DoctorList> {
   List<MentorModel> mentorList = [];
+
+  ///
+  String _uname = ''; //fetch user  full name
+  String _uEmail = ''; //fetch user  full name
+  var mCurrentUser = FirebaseAuth.instance.currentUser;
+  FirebaseAuth _auth;
+  DocumentReference ref;
   final counselorname = [
     "Dr. Moosa Khan",
     "Dr. Asim khurram",
@@ -28,6 +37,7 @@ class _DoctorListState extends State<DoctorList> {
     "Career advisor",
     "Psychologist"
   ];
+  bool isLoading = true;
   List<MentorModel> mentors = [];
   // getMentor()async{
   //   // setState(() {
@@ -59,11 +69,38 @@ class _DoctorListState extends State<DoctorList> {
     print(mentorList.length);
   }
 
+  getAllmentorList() async {
+    await DBService().getMentorsList().then((value) {
+      setState(() {
+        mentorList = value;
+        isLoading = false;
+      });
+    });
+    if (mentorList.length != 0) {
+      print(mentorList.last.email);
+    }
+  }
+
+  ///
+
+  _getCurrentUser() async {
+    mCurrentUser = _auth.currentUser;
+    DocumentSnapshot item = await FirebaseFirestore.instance
+        .collection("Students")
+        .doc(mCurrentUser.uid)
+        .get();
+
+    setState(() {
+      _uname = item['full name'];
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-
-    getAllMentors();
+    _auth = FirebaseAuth.instance; //auth iniatited
+    _getCurrentUser(); //get user call
+    getAllmentorList();
   }
 
   TextEditingController searchcontroller = TextEditingController();
@@ -174,18 +211,18 @@ class _DoctorListState extends State<DoctorList> {
                 ListView.builder(
                     primary: false,
                     shrinkWrap: true,
-                    itemCount: counselorname.length,
+                    itemCount: mentorList.length,
                     scrollDirection: Axis.vertical,
                     itemBuilder: (context, index) {
-                      final professions = profession[index];
-                      final details = counselorname[index];
                       return InkWell(
                         focusColor: primaryColor,
                         onTap: () {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => DoctorDetails()));
+                                  builder: (context) => DoctorDetails(
+                                        mentor: mentorList[index],
+                                      )));
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -203,15 +240,19 @@ class _DoctorListState extends State<DoctorList> {
                                 SizedBox(
                                   width: 20,
                                 ),
-                                Container(
-                                    color: primaryColor,
-                                    height: 100,
-                                    width: 100,
-                                    child: Icon(
-                                      Icons.account_box,
-                                      color: primaryColor,
-                                      size: 50,
-                                    )),
+                                SizedBox(
+                                  height: 50,
+                                  width: 50,
+                                  child: mentorList[index].gender == 'Male'
+                                      ? Image.asset(
+                                          'assets/images/counselor.png',
+                                          fit: BoxFit.fill,
+                                        )
+                                      : Image.asset(
+                                          'assets/images/femaledoc.png',
+                                          fit: BoxFit.fill,
+                                        ),
+                                ),
                                 SizedBox(
                                   width: 20,
                                 ),
@@ -220,7 +261,7 @@ class _DoctorListState extends State<DoctorList> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      details,
+                                      "${mentorList[index].fullName}",
                                       style: TextStyle(
                                         fontSize: 17,
                                         fontWeight: FontWeight.bold,
@@ -228,7 +269,7 @@ class _DoctorListState extends State<DoctorList> {
                                       ),
                                     ),
                                     Text(
-                                      professions,
+                                      "${mentorList[index].jobDesc}",
                                       style: TextStyle(
                                         fontSize: 13,
                                         fontStyle: FontStyle.italic,
@@ -240,7 +281,7 @@ class _DoctorListState extends State<DoctorList> {
                                           MainAxisAlignment.spaceEvenly,
                                       children: [
                                         Text(
-                                          '1000 PKR',
+                                          "${mentorList[index].fees}",
                                           style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold,

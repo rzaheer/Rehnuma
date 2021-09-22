@@ -1,5 +1,6 @@
 import 'package:filter_list/filter_list.dart';
 import 'package:finalyearproject/CustomWidgets/Custombottombar.dart';
+import 'package:finalyearproject/CustomWidgets/Custombutton.dart';
 import 'package:finalyearproject/CustomWidgets/Loading.dart';
 import 'package:finalyearproject/Global.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Recommender/universitydetails.dart';
@@ -16,22 +17,19 @@ class SearchResults extends StatefulWidget {
 
 class _SearchResultsState extends State<SearchResults> {
   List<UniversityModel> currUnivModel = [];
+  List<UniversityModel> newList = [];
   UniversityModel uniModel;
-  List<String> countList = [
-    "low to high",
-    "High to low",
-    "Location",
-    "Four",
-    "Five",
-  ];
-  List<String> selectedCountList = [];
+  List<String> sortedList = [];
   String highlowFee;
-
   String selectedValue;
-
   String selectedSubValue;
 
-  String query;
+  void _handleRadioSubValueChange(String value) {
+    setState(() {
+      selectedSubValue = value;
+    });
+    print(selectedSubValue);
+  }
 
   UniversityModel temp;
   void _handleRadioValueChange(String value) {
@@ -41,15 +39,10 @@ class _SearchResultsState extends State<SearchResults> {
     print(selectedValue);
   }
 
-  setselectedradio(value) {
-    setState(() {
-      selectedValue = value;
-    });
-  }
-
   highLowFee(value) {
     setState(() {
-      highlowFee = value;
+      //highlowFee = value;
+      selectedSubValue = value;
     });
   }
 
@@ -63,107 +56,76 @@ class _SearchResultsState extends State<SearchResults> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Apply filters,'),
-                RadioListTile(
-                  selected: true,
-                  activeColor: Colors.indigo,
-                  dense: true,
-                  value: 'Fee',
-                  groupValue: selectedValue,
-                  onChanged: (val) {
-                    setselectedradio(val);
-                  },
-                  title: Text(
-                    'Feee',
-                    style: TextStyle(fontSize: 17, color: Colors.black),
-                  ),
+                Text(
+                  'Apply filters',
+                  style: TextStyle(fontSize: 20, color: Colors.black),
+                ),
+                Row(
+                  children: [
+                    Radio(
+                      activeColor: primaryColor,
+                      value: 'Fee',
+                      groupValue: selectedValue,
+                      onChanged: _handleRadioValueChange,
+                    ),
+                    Text(
+                      '1. Feee',
+                      style: TextStyle(fontSize: 17, color: Colors.black),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Radio(
+                      activeColor: primaryColor,
+                      value: 'Distance',
+                      groupValue: selectedValue,
+                      onChanged: _handleRadioValueChange,
+                    ),
+                    Text(
+                      '2. Distance from Central',
+                      style: TextStyle(fontSize: 17, color: Colors.black),
+                    ),
+                  ],
                 ),
                 selectedValue == 'Fee'
                     ? Row(
                         children: <Widget>[
                           Radio(
-                              activeColor: Colors.green,
-                              materialTapTargetSize:
-                                  MaterialTapTargetSize.shrinkWrap,
-                              value: 'Low to High',
-                              groupValue: highlowFee,
-                              onChanged: (value) {
-                                if (selectedValue == 'Fee') {
-                                  highLowFee(value);
-                                }
-                              }),
-                          Text('Low to High'),
+                            activeColor: Colors.green,
+                            materialTapTargetSize:
+                                MaterialTapTargetSize.shrinkWrap,
+                            value: 'Low to High',
+                            groupValue: selectedSubValue,
+                            onChanged: SortPriceAscending(currUnivModel),
+                          ),
+                          Text(
+                            'Low to High',
+                            style: TextStyle(fontSize: 17, color: Colors.black),
+                          ),
                           Radio(
-                              activeColor: Colors.green,
-                              materialTapTargetSize:
-                                  MaterialTapTargetSize.shrinkWrap,
-                              value: 'High to Low',
-                              groupValue: highlowFee,
-                              onChanged: (value) {
-                                if (selectedValue == 'Fee') {
-                                  highLowFee(value);
-                                }
-                              }),
-                          Text('High to Low'),
+                            activeColor: Colors.green,
+                            materialTapTargetSize:
+                                MaterialTapTargetSize.shrinkWrap,
+                            value: 'High to Low',
+                            groupValue: selectedSubValue,
+                            onChanged: _handleRadioSubValueChange,
+                          ),
+                          Text(
+                            'High to Low',
+                            style: TextStyle(fontSize: 17, color: Colors.black),
+                          ),
                         ],
                       )
-                    : Container(),
-                /*  Row(
-                  children: [
-                    Radio(
-                        groupValue: selectedValue,
-                        value: 'fees',
-                        onChanged: _handleRadioValueChange),
-                    Text(
-                      'Fees',
-                    ),
-                  ],
-                ),
-                Center(
-                  child: Row(
-                    children: [
-                      Radio(
-                          groupValue: selectedSubValue,
-                          value: 'low to high',
-                          onChanged: (v) {
-                            setState(() {
-                              selectedSubValue = v;
-                            });
-                          }),
-                      Text(
-                        'Low to high',
+                    : Container(
+                        child: Text('kaddu'),
                       ),
-                    ],
-                  ),
-                ),
-                Center(
-                  child: Row(
-                    children: [
-                      Radio(
-                          groupValue: selectedSubValue,
-                          value: 'high to low',
-                          onChanged: (v) {
-                            setState(() {
-                              selectedSubValue = v;
-                            });
-                          }),
-                      Text(
-                        'Low to high',
-                      ),
-                    ],
-                  ),
-                ),
-                Row(
-                  children: [
-                    Radio(
-                        groupValue: selectedValue,
-                        value: 'location',
-                        onChanged: _handleRadioValueChange),
-                    Text(
-                      'Location',
-                    ),
-                  ],
-                ), */
+                CustomButton(
+                    title: 'Apply',
+                    onPressed: SortPriceAscending(currUnivModel),
+                    height: 50,
+                    width: 100,
+                    buttoncolor: Colors.green)
               ],
             ),
           )),
@@ -186,7 +148,7 @@ class _SearchResultsState extends State<SearchResults> {
     }
   }
 
-  Future _openFilterDialog() async {
+/*   Future _openFilterDialog() async {
     await FilterListDialog.display<String>(context,
         listData: countList,
         selectedListData: selectedCountList,
@@ -214,6 +176,27 @@ class _SearchResultsState extends State<SearchResults> {
       }
       Navigator.pop(context);
     });
+  } */
+  SortPriceAscending(currList) {
+    currUnivModel
+        .sort((a, b) => a.undergraduateFees.compareTo(b.undergraduateFees));
+    for (UniversityModel u in currList) {
+      for (var i = 0; i <= currUnivModel.length; i++) {
+        currUnivModel = currList;
+      }
+      print(currList.length);
+      print(newList.length);
+      print("llll");
+      print(newList.first.undergraduateFees);
+      print(currList.first.undergraduateFees);
+    }
+  }
+
+  ////
+  SortPriceDescending(currList) {
+    currUnivModel
+        .sort((b, a) => b.undergraduateFees.compareTo(a.undergraduateFees));
+    for (UniversityModel u in currList) print(u.undergraduateFees);
   }
 
   @override

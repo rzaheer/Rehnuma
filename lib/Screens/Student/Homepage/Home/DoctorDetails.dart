@@ -40,7 +40,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
       body: SingleChildScrollView(
         child: Container(
           color: secondaryColor,
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -49,15 +49,18 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   //Profile picture
-                  Container(
-                    color: primaryColor,
+                  SizedBox(
                     height: 100,
                     width: 100,
-                    child: Icon(
-                      Icons.account_box,
-                      color: primaryColor,
-                      size: 50,
-                    ),
+                    child: widget.mentor.gender == 'Male'
+                        ? Image.asset(
+                            'assets/images/counselor.png',
+                            fit: BoxFit.fill,
+                          )
+                        : Image.asset(
+                            'assets/images/femaledoc.png',
+                            fit: BoxFit.fill,
+                          ),
                   ),
                   SizedBox(
                     width: 15,
