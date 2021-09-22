@@ -391,7 +391,7 @@ class _StudentHomeState extends State<StudentHome> {
                                 ),
                               ),
                               Text(
-                                "${mentorList[index].firstName}",
+                                "${mentorList[index].fullName}",
                                 style: TextStyle(
                                   fontSize: 13,
                                   fontStyle: FontStyle.italic,

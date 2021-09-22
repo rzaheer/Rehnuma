@@ -126,7 +126,7 @@ class DBService {
  */
 
   Future<List<MentorModel>> getMentorsList() async {
-    CollectionReference mentorRef = _db.collection('Mentor');
+    CollectionReference mentorRef = _db.collection('Mentors');
     List<MentorModel> _allMentors = [];
     try {
       QuerySnapshot qs = await mentorRef.get();

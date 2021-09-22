@@ -5,7 +5,7 @@ class MentorModel {
   final String jobDesc;
   final String email;
   final String fees;
-  final int experience;
+  final String experience;
   final String education,phoneNumber;
   final int ratings;
   String gender;
@@ -27,17 +27,17 @@ class MentorModel {
     factory MentorModel.fromMap(Map<String, dynamic> json) {
     final MentorModel courseMod = MentorModel(
       mentorId: json["mentorId"],
-      cnic: json["CNIC"],
+      cnic: json["cnic"],
       email: json["email"],
       firstName: json["firstName"],
       fullName: json["fullname"],
       fees: json["fees"],
-      experience: json["experience"],
+      experience: json["expYears"],
       jobDesc: json["jobDesc"] ,
       ratings: json["Ratings"],
       gender: json["gender"],
       education: json["education"],
-      phoneNumber: json["phoneNumber"]
+      phoneNumber: json["phone"]
     );
 
     return courseMod;
@@ -48,12 +48,12 @@ class MentorModel {
   Map<String, dynamic> toMap() => {
         "mentorId": mentorId,
         "firstName": firstName,
-        "fullName":fullName,
+        "fullname":fullName,
         "jobDesc": jobDesc,
         "email": email,
         "fees": fees,
         "educatiion": education,
-        "experience": experience,
+        "expYears": experience,
         "ratings": ratings,
         "gender":gender
       };
