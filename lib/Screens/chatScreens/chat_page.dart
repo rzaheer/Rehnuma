@@ -1,3 +1,4 @@
+import 'package:finalyearproject/Global.dart';
 import 'package:finalyearproject/Screens/chatScreens/messages_widget.dart';
 import 'package:finalyearproject/Screens/chatScreens/new_message_widget.dart';
 import 'package:finalyearproject/Screens/chatScreens/profile_header_widget.dart';
@@ -24,7 +25,7 @@ class _ChatPageState extends State<ChatPage> {
     var usser=Provider.of<StudentProvider>(context,listen: false);
     return Scaffold(
         extendBodyBehindAppBar: true,
-        backgroundColor: Colors.blue,
+        backgroundColor: primaryColor,
         body: SafeArea(
           child: Column(
             children: [

@@ -29,14 +29,14 @@ class ProfileHeaderWidget extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    buildIcon(Icons.call),
-                    SizedBox(width: 12),
-                    buildIcon(Icons.videocam),
-                  ],
-                ),
+                // Row(
+                //   mainAxisSize: MainAxisSize.min,
+                //   children: [
+                //     buildIcon(Icons.call),
+                //     SizedBox(width: 12),
+                //     buildIcon(Icons.videocam),
+                //   ],
+                // ),
                 SizedBox(width: 4),
               ],
             )

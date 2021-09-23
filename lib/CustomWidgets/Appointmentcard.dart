@@ -1,6 +1,7 @@
 import 'package:finalyearproject/Global.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Appointmentsettings/Appointdetails.dart';
 import 'package:finalyearproject/models/AppointmentModel.dart';
+import 'package:finalyearproject/models/mentorModel.dart';
 import 'package:finalyearproject/services/sharedFunctions.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -149,7 +150,9 @@ class AppointmentCard extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => AppointmentDetails()));
+                                  builder: (context) => AppointmentDetails(mentor:MentorModel(fullName: appointmentModel.mentorName,
+                                  mentorId: appointmentModel.mentorId
+                                  ),)));
                         },
                         child: Text(
                           'View details',

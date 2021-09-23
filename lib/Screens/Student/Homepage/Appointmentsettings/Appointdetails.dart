@@ -25,6 +25,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.mentor.fullName);
     var size = MediaQuery.of(context).size;
     final format = DateFormat("dd/MM/yyyy");
     List<String> slots = [
@@ -67,7 +68,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                   height: 10,
                 ),
                 Text(
-                  'Doctor name',
+                  '${widget.mentor.fullName}',
                   style: TextStyle(
                     color: primaryColor,
                     fontWeight: FontWeight.bold,
@@ -209,23 +210,29 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                   children: [
                     CustomButton(
                       buttoncolor: Colors.blue,
-                      title: 'Start',
+                      title: 'Message',
                       onPressed: () {
                         ///
                         showDialog(
                             context: context,
                             builder: (BuildContext dialogContext) {
                               return CustomDialog(
-                                  buttonText: 'Start',
+                                  buttonText: 'Message',
                                   contentString: 'Text',
                                   titleString: "Initiating your session now😊",
                                   button1Function: () {
-                                    Navigator.of(context).pushAndRemoveUntil(
-                                        MaterialPageRoute(
-                                            builder: (context) => ChatPage(
+                                    Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => ChatPage(
                                                   mentor: widget.mentor,
                                                 )),
-                                        (Route<dynamic> route) => false);
+  );
+                                    // Navigator.of(context).pushAndRemoveUntil(
+                                    //     MaterialPageRoute(
+                                    //         builder: (context) => ChatPage(
+                                    //               mentor: widget.mentor,
+                                    //             )),
+                                    //     (Route<dynamic> route) => false);
                                   });
                             });
                       },
