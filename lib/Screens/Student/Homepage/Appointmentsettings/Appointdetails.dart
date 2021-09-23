@@ -14,7 +14,7 @@ import 'package:intl/intl.dart';
 class AppointmentDetails extends StatefulWidget {
   final MentorModel mentor;
   final AppointmentModel appointment;
-  AppointmentDetails({this.mentor,this.appointment});
+  AppointmentDetails({this.mentor, this.appointment});
 
   @override
   _AppointmentDetailsState createState() => _AppointmentDetailsState();
@@ -72,9 +72,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                   height: 10,
                 ),
                 Text(
-
                   '${widget.mentor.fullName}',
-
                   style: TextStyle(
                     color: primaryColor,
                     fontWeight: FontWeight.bold,
@@ -98,7 +96,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                       width: 20,
                     ),
                     Text(
-                      formatDate(widget.appointmentModel.startTime),
+                      formatDate(widget.appointment.startTime),
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 15,
@@ -124,7 +122,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                       width: 20,
                     ),
                     Text(
-                      formatTime12Hr(widget.appointmentModel.startTime),
+                      formatTime12Hr(widget.appointment.startTime),
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 15,
@@ -214,59 +212,62 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    widget.appointment.activateChat==false? 
-                    CustomButton(
-                      buttoncolor: Colors.blue,
-                      title: 'Book Session',
-                      onPressed: () {
-                        ///
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext dialogContext) {
-                              return CustomDialog(
-                                  buttonText: 'Book Session',
-                                  contentString: 'Text',
-                                  titleString: "Initiating your session now😊",
-                                  button1Function: () {
-                                        
+                    widget.appointment.activateChat == false
+                        ? CustomButton(
+                            buttoncolor: Colors.blue,
+                            title: 'Book Session',
+                            onPressed: () {
+                              ///
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext dialogContext) {
+                                    return CustomDialog(
+                                        buttonText: 'Okay',
+                                        contentString:
+                                            'Sessions can only be initiated by the counselors.',
+                                        titleString: "Session Status😊",
+                                        button1Function: () {
+                                          Navigator.of(context).pop();
+                                        });
                                   });
-                            });
-                      },
-                      height: 40,
-                      width: size.width / 2.5,
-                    )
-                     :CustomButton(
-                      buttoncolor: Colors.blue,
-                      title: 'Message',
-                      onPressed: () {
-                        ///
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext dialogContext) {
-                              return CustomDialog(
-                                  buttonText: 'Message',
-                                  contentString: 'Text',
-                                  titleString: "Initiating your session now😊",
-                                  button1Function: () {
-                                    Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => ChatPage(
-                                                  mentor: widget.mentor,
-                                                )),
-  );
-                                    // Navigator.of(context).pushAndRemoveUntil(
-                                    //     MaterialPageRoute(
-                                    //         builder: (context) => ChatPage(
-                                    //               mentor: widget.mentor,
-                                    //             )),
-                                    //     (Route<dynamic> route) => false);
+                            },
+                            height: 40,
+                            width: size.width / 1.2,
+                          )
+                        : CustomButton(
+                            buttoncolor: Colors.blue,
+                            title: 'Message',
+                            onPressed: () {
+                              ///
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext dialogContext) {
+                                    return CustomDialog(
+                                        buttonText: 'Message',
+                                        contentString:
+                                            'Your session will be initiated now.',
+                                        titleString: "Session Initiating😊",
+                                        button1Function: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => ChatPage(
+                                                      mentor: widget.mentor,
+                                                    )),
+                                          );
+                                          // Navigator.of(context).pushAndRemoveUntil(
+                                          //     MaterialPageRoute(
+                                          //         builder: (context) => ChatPage(
+                                          //               mentor: widget.mentor,
+                                          //             )),
+                                          //     (Route<dynamic> route) => false);
+                                        });
                                   });
-                            });
-                      },
-                      height: 40,
-                      width: size.width / 2.5,
-                    ),
-                    CustomButton(
+                            },
+                            height: 40,
+                            width: size.width / 2.5,
+                          ),
+                    /* CustomButton(
                       buttoncolor: Colors.green,
                       title: 'Modify',
                       onPressed: () {
@@ -382,7 +383,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                       },
                       height: 40,
                       width: size.width / 2.5,
-                    ),
+                    ), */
                   ],
                 ),
                 SizedBox(
@@ -390,11 +391,38 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                 ),
                 Center(
                   child: CustomButton(
-                      buttoncolor: buttonColor,
-                      title: 'Cancel',
-                      onPressed: () {},
-                      height: 40,
-                      width: size.width / 1.2),
+                    buttoncolor: buttonColor,
+                    title: 'Cancel',
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext dialogContext) {
+                          return CustomDialog(
+                              buttonText: 'Okay',
+                              contentString:
+                                  'Your appointment has been cancelled, The amount will be refunded to your account.',
+                              titleString: "Appointment Cancelled ☹️",
+                              button1Function: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ChatPage(
+                                            mentor: widget.mentor,
+                                          )),
+                                );
+                                // Navigator.of(context).pushAndRemoveUntil(
+                                //     MaterialPageRoute(
+                                //         builder: (context) => ChatPage(
+                                //               mentor: widget.mentor,
+                                //             )),
+                                //     (Route<dynamic> route) => false);
+                              });
+                        },
+                      );
+                    },
+                    height: 40,
+                    width: size.width / 1.2,
+                  ),
                 ),
                 SizedBox(
                   height: 20,

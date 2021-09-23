@@ -1,9 +1,7 @@
 import 'package:finalyearproject/CustomWidgets/Custombottombar.dart';
 import 'package:finalyearproject/CustomWidgets/Custombutton.dart';
 import 'package:finalyearproject/Global.dart';
-
 import 'package:finalyearproject/Screens/Student/Homepage/Home/BookAppointment/BookAppointment1.dart';
-import 'package:finalyearproject/Screens/chatScreens/chat_page.dart';
 import 'package:finalyearproject/models/mentorModel.dart';
 
 import 'package:flutter/material.dart';
@@ -97,7 +95,12 @@ class _DoctorDetailsState extends State<DoctorDetails> {
               SizedBox(
                 height: 10,
               ),
-              Text("${widget.mentor.educationlevel}",
+              Text(
+                  "${widget.mentor.educationlevel}" +
+                      " in " +
+                      (widget.mentor.fieldOfEducation == 'null'
+                          ? "Psychology"
+                          : "${widget.mentor.fieldOfEducation}"),
                   style: TextStyle(
                     fontSize: 15,
                     color: inputTextColor,
@@ -198,7 +201,6 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                   width: size.width / 2,
                 ),
               ), */
-
             ],
           ),
         ),

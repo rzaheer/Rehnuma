@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:finalyearproject/Global.dart';
 
-
 /// Only for demo purposes!
 /// Don't you dare do it in real apps!
 class PaymentServices {
@@ -19,13 +18,13 @@ class PaymentServices {
             "product_data": {
               "name": "Appointment",
             },
-            "unit_amount": 2000,
+            "unit_amount": 1000,
           },
           "quantity": 1
         },
       ],
       'mode': 'payment',
-   
+
       //'customer': 'cus_JXim3F3GpLT9wN',
       'success_url': 'https://www.google.com/',
       'cancel_url': 'https://www.facebook.com/',
