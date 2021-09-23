@@ -50,6 +50,8 @@ dependencies:
   filter_list: ^0.0.7
   email_auth: ^0.0.1+2
   provider: ^4.3.3
+  flutter_webview_plugin: ^0.3.11
+  dio: ^3.0.10
 
 
 

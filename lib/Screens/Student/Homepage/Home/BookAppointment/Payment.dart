@@ -2,9 +2,11 @@ import 'package:finalyearproject/CustomWidgets/Custombottombar.dart';
 import 'package:finalyearproject/CustomWidgets/Custombutton.dart';
 import 'package:finalyearproject/CustomWidgets/Customdialog.dart';
 import 'package:finalyearproject/Global.dart';
+import 'package:finalyearproject/Screens/PaymentWebview.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Appointmentsettings/Appointments.dart';
 import 'package:finalyearproject/models/AppointmentModel.dart';
 import 'package:finalyearproject/services/DBservice.dart';
+import 'package:finalyearproject/services/PaymentServices.dart';
 import 'package:flutter/material.dart';
 
 class PaymentMethod extends StatefulWidget {
@@ -16,7 +18,8 @@ class PaymentMethod extends StatefulWidget {
 
 class _PaymentMethodState extends State<PaymentMethod> {
   int selectedIndex;
-  final image = [
+  bool loading = false;
+  var image = [
     "assets/images/easy.png",
     "assets/images/jazzz.png",
     "assets/images/bankcards.png",
@@ -30,8 +33,6 @@ class _PaymentMethodState extends State<PaymentMethod> {
               titleString: 'Appointment booked!',
               contentString:
                   " Your appointment confirmation and details will be sent to you via Email",
-
-
               button1Function: () {
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
@@ -60,90 +61,103 @@ class _PaymentMethodState extends State<PaymentMethod> {
         backgroundColor: secondaryColor,
       ),
       bottomNavigationBar: CustomNavbar(index: 0, indashboard: null),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(10),
-        child: Container(
-          color: secondaryColor,
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            SizedBox(
-              height: 10,
-            ),
-            Center(
-              child: Text('Select Payment mode',
-                  style: TextStyle(
-                    fontSize: 22,
-                    color: inputTextColor,
-                    fontWeight: FontWeight.bold,
-                  )),
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            ListView.separated(
-                shrinkWrap: true,
-                primary: false,
-                separatorBuilder: (context, i) {
-                  return SizedBox(
-                    height: 5,
-                  );
-                },
-                itemBuilder: (context, i) {
-                  return SizedBox(
-                    height: MediaQuery.of(context).size.height / 6.5,
-                    width: MediaQuery.of(context).size.width,
-                    child: InkWell(
-                      onTap: () async {
-                        setState(() {
-                          setState(() {
-                            selectedIndex = i;
-                          });
-                        });
-                      },
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        color: selectedIndex == i ? primaryColor : Colors.white,
-                        elevation: 6,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              image[i],
-                              height: 90,
-                              width: 150,
-                              fit: BoxFit.contain,
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            padding: EdgeInsets.all(10),
+            child: Container(
+              color: secondaryColor,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Center(
+                      child: Text('Select Payment mode',
+                          style: TextStyle(
+                            fontSize: 22,
+                            color: inputTextColor,
+                            fontWeight: FontWeight.bold,
+                          )),
+                    ),
+                    SizedBox(
+                      height: 40,
+                    ),
+                    ListView.separated(
+                        shrinkWrap: true,
+                        primary: false,
+                        separatorBuilder: (context, i) {
+                          return SizedBox(
+                            height: 5,
+                          );
+                        },
+                        itemBuilder: (context, i) {
+                          return SizedBox(
+                            height: MediaQuery.of(context).size.height / 6.5,
+                            width: MediaQuery.of(context).size.width,
+                            child: InkWell(
+                              onTap: () async {
+                                setState(() {
+                                  setState(() {
+                                    selectedIndex = i;
+                                  });
+                                });
+                              },
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20)),
+                                color: selectedIndex == i
+                                    ? primaryColor
+                                    : Colors.white,
+                                elevation: 6,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset(
+                                      image[i],
+                                      height: 90,
+                                      width: 150,
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                          ],
-                        ),
+                          );
+                        },
+                        itemCount: image.length),
+                    SizedBox(
+                      height: 40,
+                    ),
+                    Center(
+                      child: CustomButton(
+                        buttoncolor: buttonColor,
+                        title: 'DONE',
+                        onPressed: () async {
+                          await PaymentServices()
+                              .createCheckout()
+                              .then((value) {
+                            if (value != null) {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (_) {
+                                return PaymentWebview(
+                                  sessionId: value,
+                                  id: widget.appointmentModel.appointmentId,
+                                );
+                              }));
+                            }
+                          });
+                        },
+                        height: 44,
+                        width: size.width / 3,
                       ),
                     ),
-                  );
-                },
-                itemCount: image.length),
-            SizedBox(
-              height: 40,
+                  ]),
             ),
-            Center(
-              child: CustomButton(
-                buttoncolor: buttonColor,
-                title: 'DONE',
-                onPressed: () async {
-                  await DBService()
-                      .updatePaymentStatusToTrue(
-                          widget.appointmentModel.appointmentId)
-                      .then((value) {
-                    if (value) {
-                      _showDialog();
-                    }
-                  });
-                },
-                height: 44,
-                width: size.width / 3,
-              ),
-            ),
-          ]),
-        ),
+          ),
+          loading ? CircularProgressIndicator() : Container()
+        ],
       ),
     );
   }
