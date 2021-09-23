@@ -182,6 +182,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
               SizedBox(
                 height: 20,
               ),
+
               /* Center(
                 child: CustomButton(
                   buttoncolor: buttonColor,
@@ -197,6 +198,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                   width: size.width / 2,
                 ),
               ), */
+
             ],
           ),
         ),

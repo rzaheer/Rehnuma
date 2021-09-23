@@ -12,15 +12,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
 class AppointmentDetails extends StatefulWidget {
-  AppointmentDetails({
-    @required this.appointmentModel,
-    this.mentor,
-    this.isPast = false,
-    Key key,
-  }) : super(key: key);
-  AppointmentModel appointmentModel;
-  MentorModel mentor;
-  bool isPast;
+  final MentorModel mentor;
+  final AppointmentModel appointment;
+  AppointmentDetails({this.mentor,this.appointment});
+
   @override
   _AppointmentDetailsState createState() => _AppointmentDetailsState();
 }
@@ -34,6 +29,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.mentor.fullName);
     var size = MediaQuery.of(context).size;
     final format = DateFormat("dd/MM/yyyy");
     List<String> slots = [
@@ -76,7 +72,9 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                   height: 10,
                 ),
                 Text(
-                  widget.appointmentModel.mentorName,
+
+                  '${widget.mentor.fullName}',
+
                   style: TextStyle(
                     color: primaryColor,
                     fontWeight: FontWeight.bold,
@@ -216,25 +214,52 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    widget.appointment.activateChat==false? 
                     CustomButton(
                       buttoncolor: Colors.blue,
-                      title: 'Start',
+                      title: 'Book Session',
                       onPressed: () {
                         ///
                         showDialog(
                             context: context,
                             builder: (BuildContext dialogContext) {
                               return CustomDialog(
-                                  buttonText: 'Start',
+                                  buttonText: 'Book Session',
                                   contentString: 'Text',
                                   titleString: "Initiating your session now😊",
                                   button1Function: () {
-                                    Navigator.of(context).pushAndRemoveUntil(
-                                        MaterialPageRoute(
-                                            builder: (context) => ChatPage(
+                                        
+                                  });
+                            });
+                      },
+                      height: 40,
+                      width: size.width / 2.5,
+                    )
+                     :CustomButton(
+                      buttoncolor: Colors.blue,
+                      title: 'Message',
+                      onPressed: () {
+                        ///
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext dialogContext) {
+                              return CustomDialog(
+                                  buttonText: 'Message',
+                                  contentString: 'Text',
+                                  titleString: "Initiating your session now😊",
+                                  button1Function: () {
+                                    Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => ChatPage(
                                                   mentor: widget.mentor,
                                                 )),
-                                        (Route<dynamic> route) => false);
+  );
+                                    // Navigator.of(context).pushAndRemoveUntil(
+                                    //     MaterialPageRoute(
+                                    //         builder: (context) => ChatPage(
+                                    //               mentor: widget.mentor,
+                                    //             )),
+                                    //     (Route<dynamic> route) => false);
                                   });
                             });
                       },

@@ -307,7 +307,10 @@ class _BookAppointment1State extends State<BookAppointment1> {
                               isCompleted: false,
                               mentorName: widget.mentor.fullName,
                               paymentReceived: false,
-                              studentId: prov.currStudent.studentId);
+                              studentId: prov.currStudent.studentId,
+                              activateChat: false,
+                              studentName: prov.currStudent.firstname
+                              );
                           await DBService()
                               .postAppointment(appointment)
                               .then((success) {

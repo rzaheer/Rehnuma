@@ -1,3 +1,4 @@
+import 'package:finalyearproject/Global.dart';
 import 'package:finalyearproject/models/STDRegistermodel.dart';
 import 'package:finalyearproject/models/mentorModel.dart';
 import 'package:finalyearproject/services/firebase_api.dart';
@@ -64,7 +65,7 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
                 padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.blue,
+                  color: primaryColor,
                 ),
                 child: Icon(Icons.send, color: Colors.white),
               ),

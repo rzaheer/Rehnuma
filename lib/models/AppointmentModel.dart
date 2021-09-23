@@ -1,8 +1,8 @@
 class AppointmentModel {
-  String appointmentId, mentorId, studentId, slotId, mentorName;
+  String appointmentId, mentorId, studentId, slotId, mentorName,studentName;
   DateTime startTime, endTime;
 
-  bool isCompleted, paymentReceived;
+  bool isCompleted, paymentReceived,activateChat;
 
   AppointmentModel(
       {this.appointmentId,
@@ -13,7 +13,10 @@ class AppointmentModel {
       this.endTime,
       this.startTime,
       this.isCompleted,
-      this.paymentReceived});
+      this.paymentReceived,
+      this.activateChat,
+      this.studentName
+      });
 
   factory AppointmentModel.fromJson(Map<String, dynamic> json) =>
       AppointmentModel(
@@ -25,7 +28,10 @@ class AppointmentModel {
           startTime: json["startTime"].toDate(),
           isCompleted: json["isCompleted"],
           mentorName: json["mentorName"],
-          paymentReceived: json["paymentReceived"]);
+          paymentReceived: json["paymentReceived"],
+          activateChat: json["activateChat"],
+          studentName: json["studentName"]
+          );
 
   Map<String, dynamic> toJson() => {
         "appointmentId": appointmentId,
@@ -36,6 +42,8 @@ class AppointmentModel {
         "isCompleted": isCompleted,
         "slotId": slotId,
         "mentorName": mentorName,
-        "paymentReceived": paymentReceived
+        "paymentReceived": paymentReceived,
+        "activateChat":activateChat,
+        "studentName":studentName
       };
 }
