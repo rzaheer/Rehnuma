@@ -8,6 +8,7 @@ final Color secondaryColor = Colors.white;
 final Color highlightColor = Color(0xFF088185);
 final Color inputTextColor = Color(0xFF024D61);
 final Color buttonColor = Colors.red[900];
+final Color btnColor = Colors.green;
 const kHintColor = Color(0xFF7F7F7F);
 
 Size size(BuildContext context) {

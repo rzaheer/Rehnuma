@@ -7,9 +7,7 @@ import 'package:finalyearproject/CustomWidgets/Loading.dart';
 import 'package:finalyearproject/Global.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Home/DoctorDetails.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Home/DoctorsList.dart';
-import 'package:finalyearproject/Screens/Student/Homepage/Home/DrawerItems/FAQs.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Home/DrawerItems/Notifications.dart';
-import 'package:finalyearproject/models/STDRegistermodel.dart';
 import 'package:finalyearproject/models/mentorModel.dart';
 
 import 'package:finalyearproject/services/DBservice.dart';
@@ -176,9 +174,9 @@ class _StudentHomeState extends State<StudentHome> {
             ),
             ListTile(
               leading: FaIcon(
-                FontAwesomeIcons.question,
+                FontAwesomeIcons.infoCircle,
               ),
-              title: Text('FAQs'),
+              title: Text('About the App'),
               onTap: () {
                 // Navigator.of(context)
                 //  .push(MaterialPageRoute(builder: (context) => FAQs()));//

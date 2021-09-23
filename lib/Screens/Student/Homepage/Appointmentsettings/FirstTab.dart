@@ -46,24 +46,27 @@ class _ScheduledappointmentsState extends State<Scheduledappointments> {
     return SingleChildScrollView(
       child: Container(
         color: secondaryColor,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 20,
-            ),
-            appointments.length == 0
-                ? NoAppointmentsFound()
-                : ListView.builder(
-                    shrinkWrap: true,
-                    primary: false,
-                    itemCount: appointments.length,
-                    itemBuilder: (_, i) {
-                      return AppointmentCard(
-                        appointmentModel: appointments[i],
-                      );
-                    })
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 20,
+              ),
+              appointments.length == 0
+                  ? NoAppointmentsFound()
+                  : ListView.builder(
+                      shrinkWrap: true,
+                      primary: false,
+                      itemCount: appointments.length,
+                      itemBuilder: (_, i) {
+                        return AppointmentCard(
+                          appointmentModel: appointments[i],
+                        );
+                      })
+            ],
+          ),
         ),
       ),
     );
