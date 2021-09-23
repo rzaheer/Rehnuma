@@ -183,21 +183,21 @@ class _DoctorDetailsState extends State<DoctorDetails> {
               SizedBox(
                 height: 20,
               ),
-              Center(
-                child: CustomButton(
-                  buttoncolor: buttonColor,
-                  title: 'Message',
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                ChatPage(mentor: widget.mentor)));
-                  },
-                  height: 50,
-                  width: size.width / 2,
-                ),
-              ),
+              // Center(
+              //   child: CustomButton(
+              //     buttoncolor: buttonColor,
+              //     title: 'Message',
+              //     onPressed: () {
+              //       Navigator.push(
+              //           context,
+              //           MaterialPageRoute(
+              //               builder: (context) =>
+              //                   ChatPage(mentor: widget.mentor)));
+              //     },
+              //     height: 50,
+              //     width: size.width / 2,
+              //   ),
+              // ),
             ],
           ),
         ),
