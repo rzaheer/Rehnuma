@@ -8,6 +8,7 @@ import 'package:finalyearproject/Global.dart';
 import 'package:finalyearproject/Screens/PaymentWebview.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Home/DoctorDetails.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Home/DoctorsList.dart';
+import 'package:finalyearproject/Screens/Student/Homepage/Home/DrawerItems/About.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Home/DrawerItems/Notifications.dart';
 import 'package:finalyearproject/models/mentorModel.dart';
 
@@ -180,8 +181,8 @@ class _StudentHomeState extends State<StudentHome> {
               ),
               title: Text('About the App'),
               onTap: () {
-                // Navigator.of(context)
-                //  .push(MaterialPageRoute(builder: (context) => FAQs()));//
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => Aboutus())); //
               },
             ),
             ListTile(
@@ -444,7 +445,7 @@ class _StudentHomeState extends State<StudentHome> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            '${mentorList[index].fees}',
+                                            '1000 PKR',
                                             style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold,

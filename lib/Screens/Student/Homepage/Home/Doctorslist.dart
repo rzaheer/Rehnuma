@@ -143,7 +143,7 @@ class _DoctorListState extends State<DoctorList> {
                 SizedBox(
                   height: 15,
                 ),
-                Row(
+                /* Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Card(
@@ -193,7 +193,7 @@ class _DoctorListState extends State<DoctorList> {
                           ],
                         ),
                       ),
-                    ),
+                    ), 
                     SizedBox(
                       width: 70,
                       height: 40,
@@ -207,7 +207,7 @@ class _DoctorListState extends State<DoctorList> {
                       ),
                     ),
                   ],
-                ),
+                ), */
                 ListView.builder(
                     primary: false,
                     shrinkWrap: true,

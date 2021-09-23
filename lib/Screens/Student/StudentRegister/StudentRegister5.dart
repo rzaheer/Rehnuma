@@ -173,7 +173,7 @@ class _StudentRegister5State extends State<StudentRegister5> {
                                       passwordController.text, context)
                                   .then((value) {
                                 if (value == true) {
-                                  /* showDialog(
+                                  showDialog(
                                       context: context,
                                       builder: (BuildContext dialogContext) {
                                         return CustomDialog(
@@ -193,7 +193,7 @@ class _StudentRegister5State extends State<StudentRegister5> {
                                                       (Route<dynamic> route) =>
                                                           false);
                                             });
-                                      }); */
+                                      });
                                   Navigator.of(context).pushAndRemoveUntil(
                                       MaterialPageRoute(
                                           builder: (context) => StudentHome()),

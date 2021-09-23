@@ -1,4 +1,4 @@
-# finalyearproject
+# Rehnuma - Your CAREER Mentor
 
 A new Flutter project.
 

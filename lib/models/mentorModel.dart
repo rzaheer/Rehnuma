@@ -6,7 +6,7 @@ class MentorModel {
   final String email;
   final String fees;
   final String experience;
-  final String education, phoneNumber;
+  final String educationlevel, phoneNumber;
   final int ratings;
   String gender;
   List slots;
@@ -18,7 +18,7 @@ class MentorModel {
       this.email,
       this.jobDesc,
       this.fees,
-      this.education,
+      this.educationlevel,
       this.phoneNumber,
       this.experience,
       this.ratings,
@@ -38,7 +38,7 @@ class MentorModel {
         jobDesc: json["jobDesc"],
         ratings: json["Ratings"],
         gender: json["gender"],
-        education: json["education"],
+        educationlevel: json["educationlevel"],
         slots: json["slots"] ?? [],
         phoneNumber: json["phone"]);
 
@@ -52,7 +52,7 @@ class MentorModel {
         "jobDesc": jobDesc,
         "email": email,
         "fees": fees,
-        "educatiion": education,
+        "educationlevel": educationlevel,
         "expYears": experience,
         "ratings": ratings,
         "gender": gender

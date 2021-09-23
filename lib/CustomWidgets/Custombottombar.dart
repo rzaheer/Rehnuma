@@ -48,7 +48,7 @@ class _CustomNavbarState extends State<CustomNavbar> {
             }
             if (index == 2) {
               Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => ChatsPage()),
+                  MaterialPageRoute(builder: (context) => Forum()),
                   (Route<dynamic> route) => false);
             }
             if (index == 3 || index == 4) {

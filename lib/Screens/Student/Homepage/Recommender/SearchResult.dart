@@ -246,7 +246,7 @@ class _SearchResultsState extends State<SearchResults> {
                   ),
                 ),
                 SizedBox(height: 5),
-                Padding(
+                /* Padding(
                   padding: const EdgeInsets.only(left: 200),
                   child: SizedBox(
                     height: 30,
@@ -278,7 +278,7 @@ class _SearchResultsState extends State<SearchResults> {
                       ),
                     ),
                   ),
-                ),
+                ), */
                 SizedBox(height: 10),
                 widget.uniList == null
                     ? Loading()

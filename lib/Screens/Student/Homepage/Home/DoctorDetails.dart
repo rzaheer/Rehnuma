@@ -97,7 +97,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
               SizedBox(
                 height: 10,
               ),
-              Text("${widget.mentor.education}",
+              Text("${widget.mentor.educationlevel}",
                   style: TextStyle(
                     fontSize: 15,
                     color: inputTextColor,
@@ -115,8 +115,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
               SizedBox(
                 height: 10,
               ),
-              Text(
-                  "${widget.mentor.experience.toString()} years in the professional industry",
+              Text("${widget.mentor.experience.toString()}",
                   style: TextStyle(
                     fontSize: 15,
                     color: inputTextColor,
@@ -134,7 +133,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
               SizedBox(
                 height: 10,
               ),
-              Text("${widget.mentor.fees} per session",
+              Text("1000 PKR per session",
                   style: TextStyle(
                     fontSize: 15,
                     color: buttonColor,
@@ -167,7 +166,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
               ),
               Center(
                 child: CustomButton(
-                  buttoncolor: buttonColor,
+                  buttoncolor: Colors.green,
                   title: 'Book Appointment',
                   onPressed: () {
                     Navigator.push(
@@ -183,7 +182,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
               SizedBox(
                 height: 20,
               ),
-              Center(
+              /* Center(
                 child: CustomButton(
                   buttoncolor: buttonColor,
                   title: 'Message',
@@ -197,7 +196,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                   height: 50,
                   width: size.width / 2,
                 ),
-              ),
+              ), */
             ],
           ),
         ),
