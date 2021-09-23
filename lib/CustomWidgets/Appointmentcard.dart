@@ -150,7 +150,7 @@ class AppointmentCard extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => AppointmentDetails(mentor:MentorModel(fullName: appointmentModel.mentorName,
+                                  builder: (context) => AppointmentDetails(appointment: appointmentModel,mentor:MentorModel(fullName: appointmentModel.mentorName,
                                   mentorId: appointmentModel.mentorId
                                   ),)));
                         },

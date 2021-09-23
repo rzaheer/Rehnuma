@@ -4,6 +4,7 @@ import 'package:finalyearproject/CustomWidgets/Custombutton.dart';
 import 'package:finalyearproject/CustomWidgets/Customdialog.dart';
 import 'package:finalyearproject/Global.dart';
 import 'package:finalyearproject/Screens/chatScreens/chat_page.dart';
+import 'package:finalyearproject/models/AppointmentModel.dart';
 import 'package:finalyearproject/models/mentorModel.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -11,7 +12,8 @@ import 'package:intl/intl.dart';
 
 class AppointmentDetails extends StatefulWidget {
   final MentorModel mentor;
-  AppointmentDetails({this.mentor});
+  final AppointmentModel appointment;
+  AppointmentDetails({this.mentor,this.appointment});
   @override
   _AppointmentDetailsState createState() => _AppointmentDetailsState();
 }
@@ -208,7 +210,28 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    widget.appointment.activateChat==false? 
                     CustomButton(
+                      buttoncolor: Colors.blue,
+                      title: 'Book Session',
+                      onPressed: () {
+                        ///
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext dialogContext) {
+                              return CustomDialog(
+                                  buttonText: 'Book Session',
+                                  contentString: 'Text',
+                                  titleString: "Initiating your session now😊",
+                                  button1Function: () {
+                                        
+                                  });
+                            });
+                      },
+                      height: 40,
+                      width: size.width / 2.5,
+                    )
+                     :CustomButton(
                       buttoncolor: Colors.blue,
                       title: 'Message',
                       onPressed: () {
