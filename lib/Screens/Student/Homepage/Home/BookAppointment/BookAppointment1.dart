@@ -266,10 +266,10 @@ class _BookAppointment1State extends State<BookAppointment1> {
                                           MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          formatTime12Hr(
+                                          formatTime24Hr(
                                                   slotList[i].startTime) +
                                               "-" +
-                                              formatTime12Hr(
+                                              formatTime24Hr(
                                                   slotList[i].endTime),
                                           style: TextStyle(
                                             fontSize: 15,
@@ -294,7 +294,7 @@ class _BookAppointment1State extends State<BookAppointment1> {
                       onPressed: () async {
                         if (selectedDate != null) {
                           Random random = new Random();
-                          int randomNumber = random.nextInt(1000);
+                          int randomNumber = random.nextInt(10000);
                           StudentProvider prov = Provider.of<StudentProvider>(
                               context,
                               listen: false);
@@ -305,6 +305,8 @@ class _BookAppointment1State extends State<BookAppointment1> {
                               endTime: selectedSlot.endTime,
                               slotId: selectedSlot.slotId,
                               isCompleted: false,
+                              mentorName: widget.mentor.fullName,
+                              paymentReceived: false,
                               studentId: prov.currStudent.studentId);
                           await DBService()
                               .postAppointment(appointment)
@@ -313,7 +315,9 @@ class _BookAppointment1State extends State<BookAppointment1> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => PaymentMethod()));
+                                      builder: (context) => PaymentMethod(
+                                        appointmentModel: appointment,
+                                      )));
                             } else {
                               CustomToast().showerrorToast("An error occured");
                             }

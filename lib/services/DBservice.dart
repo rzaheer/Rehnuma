@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:finalyearproject/CustomWidgets/Customtoast.dart';
 import 'package:finalyearproject/Global.dart';
 import 'package:finalyearproject/models/AppointmentModel.dart';
 import 'package:finalyearproject/models/STDRegistermodel.dart';
@@ -206,6 +207,70 @@ class DBService {
       });
     } catch (e) {
       print("Error: " + e.toString());
+      return false;
+    }
+  }
+
+  Future<List<AppointmentModel>> getScheduledAppointments(
+      String studentId) async {
+    List<AppointmentModel> allAppointments = [];
+    try {
+      return await appointmentCol
+          .where("studentId", isEqualTo: studentId)
+          .where("isCompleted", isEqualTo: false)
+          .where("paymentReceived", isEqualTo: true)
+          .get()
+          .then((QuerySnapshot qs) {
+        if (qs.docs.isNotEmpty) {
+          print("object: " + qs.docs.length.toString());
+          qs.docs.forEach((app) {
+            allAppointments.add(AppointmentModel.fromJson(app.data()));
+          });
+        }
+        return allAppointments;
+      });
+    } catch (e) {
+      print("Error: " + e.toString());
+      CustomToast().showerrorToast(e.toString());
+      return null;
+    }
+  }
+
+  Future<List<AppointmentModel>> getPastAppointments(String studentId) async {
+    List<AppointmentModel> allAppointments = [];
+    try {
+      return await appointmentCol
+          .where("studentId", isEqualTo: studentId)
+          .where("isCompleted", isEqualTo: true)
+          .where("paymentReceived", isEqualTo: true)
+          .get()
+          .then((QuerySnapshot qs) {
+        if (qs.docs.isNotEmpty) {
+          qs.docs.forEach((app) {
+            allAppointments.add(AppointmentModel.fromJson(app.data()));
+          });
+        }
+        return allAppointments;
+      });
+    } catch (e) {
+      print("Error: " + e.toString());
+      CustomToast().showerrorToast(e.toString());
+      return null;
+    }
+  }
+
+  Future<bool> updatePaymentStatusToTrue(String apptId) async {
+    try {
+      return await appointmentCol
+          .doc(apptId)
+          .update({"paymentReceived": true}).then((value) {
+        CustomToast()
+            .showsuccessToast("You have succesfully paid for the appointment");
+        return true;
+      });
+    } catch (e) {
+      print(e.toString());
+      CustomToast().showerrorToast(e.toString());
       return false;
     }
   }

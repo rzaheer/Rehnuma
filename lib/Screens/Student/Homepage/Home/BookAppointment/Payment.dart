@@ -3,9 +3,13 @@ import 'package:finalyearproject/CustomWidgets/Custombutton.dart';
 import 'package:finalyearproject/CustomWidgets/Customdialog.dart';
 import 'package:finalyearproject/Global.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Appointmentsettings/Appointments.dart';
+import 'package:finalyearproject/models/AppointmentModel.dart';
+import 'package:finalyearproject/services/DBservice.dart';
 import 'package:flutter/material.dart';
 
 class PaymentMethod extends StatefulWidget {
+  AppointmentModel appointmentModel;
+  PaymentMethod({@required this.appointmentModel});
   @override
   _PaymentMethodState createState() => _PaymentMethodState();
 }
@@ -26,6 +30,8 @@ class _PaymentMethodState extends State<PaymentMethod> {
               titleString: 'Appointment booked!',
               contentString:
                   " Your appointment confirmation and details will be sent to you via Email",
+
+
               button1Function: () {
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
@@ -87,21 +93,12 @@ class _PaymentMethodState extends State<PaymentMethod> {
                     height: MediaQuery.of(context).size.height / 6.5,
                     width: MediaQuery.of(context).size.width,
                     child: InkWell(
-                      onTap: () {
+                      onTap: () async {
                         setState(() {
                           setState(() {
                             selectedIndex = i;
                           });
                         });
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) => PaymentWebView()));
-
-                        //                     Navigator.push(
-                        // context,
-                        // MaterialPageRoute(
-                        //     builder: (context) => TestWebview()));
                       },
                       child: Card(
                         shape: RoundedRectangleBorder(
@@ -131,8 +128,15 @@ class _PaymentMethodState extends State<PaymentMethod> {
               child: CustomButton(
                 buttoncolor: buttonColor,
                 title: 'DONE',
-                onPressed: () {
-                  _showDialog();
+                onPressed: () async {
+                  await DBService()
+                      .updatePaymentStatusToTrue(
+                          widget.appointmentModel.appointmentId)
+                      .then((value) {
+                    if (value) {
+                      _showDialog();
+                    }
+                  });
                 },
                 height: 44,
                 width: size.width / 3,

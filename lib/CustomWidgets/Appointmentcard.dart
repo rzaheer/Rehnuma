@@ -1,19 +1,18 @@
 import 'package:finalyearproject/Global.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Appointmentsettings/Appointdetails.dart';
+import 'package:finalyearproject/models/AppointmentModel.dart';
+import 'package:finalyearproject/services/sharedFunctions.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class CustomCard extends StatelessWidget {
-  const CustomCard({
+class AppointmentCard extends StatelessWidget {
+  AppointmentCard({
+    @required this.appointmentModel,
+    this.isPast = false,
     Key key,
-    @required this.docname,
-    @required this.dateDay,
-    @required this.time,
   }) : super(key: key);
-  final String docname;
-  final String dateDay;
-  final String time;
-
+  AppointmentModel appointmentModel;
+  bool isPast;
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -56,7 +55,7 @@ class CustomCard extends StatelessWidget {
                 ),
               ),
               Text(
-                docname,
+                appointmentModel.mentorName,
                 style: TextStyle(
                   color: primaryColor,
                   fontSize: 18,
@@ -81,7 +80,7 @@ class CustomCard extends StatelessWidget {
                 width: 20,
               ),
               Text(
-                dateDay,
+                formatDate(appointmentModel.startTime),
                 style: TextStyle(
                     color: Colors.black,
                     fontSize: 15,
@@ -107,7 +106,7 @@ class CustomCard extends StatelessWidget {
                 width: 20,
               ),
               Text(
-                time,
+                formatTime12Hr(appointmentModel.startTime),
                 style: TextStyle(
                     color: Colors.black,
                     fontSize: 15,
@@ -126,35 +125,42 @@ class CustomCard extends StatelessWidget {
                   width: 10,
                 ),
               ),
-              SizedBox(
-                height: 40,
-                width: size.width / 2.5,
-                child: RaisedButton(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  splashColor: Colors.white,
-                  highlightColor: buttonColor,
-                  disabledColor: buttonTextColor,
-                  focusColor: buttonColor,
-                  elevation: 6,
-                  color: primaryColor,
-                  // padding: const EdgeInsets.all(8.0),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => AppointmentDetails()));
-                  },
-                  child: Text(
-                    'View details',
-                    style: TextStyle(
-                      color: textColor,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
+              isPast
+                  ? Container(
+                      child: Text(
+                        "Show a completed tag here \n Rumsha ki bachi\n  also apply loaders",
+                        style: TextStyle(fontSize: 10),
+                      ),
+                    )
+                  : SizedBox(
+                      height: 40,
+                      width: size.width / 2.5,
+                      child: RaisedButton(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        splashColor: Colors.white,
+                        highlightColor: buttonColor,
+                        disabledColor: buttonTextColor,
+                        focusColor: buttonColor,
+                        elevation: 6,
+                        color: primaryColor,
+                        // padding: const EdgeInsets.all(8.0),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AppointmentDetails()));
+                        },
+                        child: Text(
+                          'View details',
+                          style: TextStyle(
+                            color: textColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ),
               SizedBox(
                 width: 10,
               ),

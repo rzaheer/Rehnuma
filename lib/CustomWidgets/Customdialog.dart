@@ -5,17 +5,15 @@ class CustomDialog extends StatefulWidget {
   final String contentString;
   final String titleString;
   final Function button1Function;
-  final Function button2Function;
+
   final String buttonText;
-  final String button2Text;
 
   CustomDialog(
       {@required this.titleString,
       @required this.contentString,
       @required this.button1Function,
-      this.button2Function,
+      //this.button2Function,
       @required this.buttonText,
-      this.button2Text,
       Key key})
       : super(key: key);
   @override
@@ -40,13 +38,13 @@ class _CustomDialogState extends State<CustomDialog> {
                   color: primaryColor,
                   fontSize: 17,
                 ))),
-        FlatButton(
-            onPressed: widget.button2Function,
-            child: Text(widget.button2Text,
-                style: TextStyle(
-                  color: primaryColor,
-                  fontSize: 17,
-                ))),
+        // FlatButton(
+        //     onPressed: widget.button2Function,
+        //     child: Text(widget.button2Text,
+        //         style: TextStyle(
+        //           color: primaryColor,
+        //           fontSize: 17,
+        //         ))),
       ],
     );
   }
