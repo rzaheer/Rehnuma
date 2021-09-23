@@ -6,6 +6,7 @@ import 'package:finalyearproject/Global.dart';
 import 'package:finalyearproject/Screens/chatScreens/chat_page.dart';
 import 'package:finalyearproject/models/AppointmentModel.dart';
 import 'package:finalyearproject/models/mentorModel.dart';
+import 'package:finalyearproject/services/sharedFunctions.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
@@ -14,6 +15,7 @@ class AppointmentDetails extends StatefulWidget {
   final MentorModel mentor;
   final AppointmentModel appointment;
   AppointmentDetails({this.mentor,this.appointment});
+
   @override
   _AppointmentDetailsState createState() => _AppointmentDetailsState();
 }
@@ -70,7 +72,9 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                   height: 10,
                 ),
                 Text(
+
                   '${widget.mentor.fullName}',
+
                   style: TextStyle(
                     color: primaryColor,
                     fontWeight: FontWeight.bold,
@@ -94,7 +98,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                       width: 20,
                     ),
                     Text(
-                      '1st April 2021, Saturday',
+                      formatDate(widget.appointmentModel.startTime),
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 15,
@@ -120,7 +124,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                       width: 20,
                     ),
                     Text(
-                      '01:00 PM',
+                      formatTime12Hr(widget.appointmentModel.startTime),
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 15,
@@ -177,7 +181,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                       width: 20,
                     ),
                     Text(
-                      '1000PKR',
+                      '1000',
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 15,

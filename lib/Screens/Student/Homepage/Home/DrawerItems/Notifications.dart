@@ -14,7 +14,7 @@ class Notifications extends StatelessWidget {
           color: secondaryColor,
         ), */
         title: Text(
-          'About us',
+          'Motifications',
           style: TextStyle(
               fontSize: 17, color: secondaryColor, fontWeight: FontWeight.bold),
         ),
@@ -27,8 +27,11 @@ class Notifications extends StatelessWidget {
               onPressed: null)
         ],
       ),
-      body: Container(
-        color: secondaryColor,
+      body: Center(
+        child: Container(
+          color: secondaryColor,
+          child: Text('NO NEW NOTIFICATIONS'),
+        ),
       ),
     );
   }

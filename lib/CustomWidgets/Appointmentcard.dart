@@ -129,7 +129,7 @@ class AppointmentCard extends StatelessWidget {
               isPast
                   ? Container(
                       child: Text(
-                        "Show a completed tag here \n Rumsha ki bachi\n  also apply loaders",
+                        "Completed",
                         style: TextStyle(fontSize: 10),
                       ),
                     )
@@ -150,9 +150,11 @@ class AppointmentCard extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
+
                                   builder: (context) => AppointmentDetails(appointment: appointmentModel,mentor:MentorModel(fullName: appointmentModel.mentorName,
                                   mentorId: appointmentModel.mentorId
                                   ),)));
+
                         },
                         child: Text(
                           'View details',

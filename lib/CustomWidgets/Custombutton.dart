@@ -26,7 +26,7 @@ class CustomButton extends StatelessWidget {
         splashColor: Colors.white,
         highlightColor: highlightColor,
         disabledColor: buttonTextColor,
-        focusColor: buttoncolor,
+        focusColor: btnColor,
         elevation: 6,
         color: buttoncolor,
         // padding: const EdgeInsets.all(8.0),

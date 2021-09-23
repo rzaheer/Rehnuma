@@ -1,11 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:finalyearproject/CustomWidgets/Customdialog.dart';
 import 'package:finalyearproject/CustomWidgets/Customtoast.dart';
+import 'package:finalyearproject/Screens/Student/Homepage/Home/Studenthome.dart';
+import 'package:finalyearproject/Screens/Student/StudentRegister/StudentRegister1.dart';
 import 'package:finalyearproject/models/STDRegistermodel.dart';
 import 'package:finalyearproject/models/user.dart';
 import 'package:finalyearproject/services/DBservice.dart';
 import 'package:finalyearproject/services/StudentProvider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
@@ -173,16 +177,36 @@ class AuthService {
       User firebaseUser = googleUserCredential.user;
       StudentModel newStudent = StudentModel(
         firstname: user.displayName,
-        // lastname: studentModel.lastname,
-        // dob: studentModel.dob,
-        // educationlevel: studentModel.educationlevel,
-        //fieldOfEducation: user.
-        // gender: studentModel.gender,
+        lastname: studentModel.lastname,
+        dob: studentModel.dob,
+        educationlevel: studentModel.educationlevel,
+        fieldOfEducation: studentModel.fieldOfEducation,
+        gender: studentModel.gender,
         phone: user.phoneNumber,
         studentId: googleUserCredential.user.uid,
         //password: studentModel.password,
         email: user.email,
       );
+      showDialog(
+          context: context,
+          builder: (BuildContext dialogContext) {
+            return CustomDialog(
+                buttonText: 'OK',
+                contentString:
+                    'You have successfully registered on Rehnuma, Lets start this journey~',
+                titleString: newStudent != null
+                    ? "Welcome, ${newStudent.firstname}😊"
+                    : "",
+                button1Function: () {
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                          builder: (context) => StudentRegister()),
+                      (Route<dynamic> route) => false);
+                });
+          });
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => StudentRegister()),
+          (Route<dynamic> route) => false);
       print(firebaseUser.email);
 
       print("User Email:${user.email}");

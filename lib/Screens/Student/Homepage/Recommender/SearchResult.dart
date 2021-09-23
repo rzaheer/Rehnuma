@@ -181,9 +181,12 @@ class _SearchResultsState extends State<SearchResults> {
     currUnivModel
         .sort((a, b) => a.undergraduateFees.compareTo(b.undergraduateFees));
     for (UniversityModel u in currList) {
-      for (var i = 0; i <= currUnivModel.length; i++) {
+      /*  for (var i = 0; i <= currUnivModel.length; i++) {
         currUnivModel = currList;
-      }
+      } */
+      setState(() {
+        currUnivModel = currList;
+      });
       print(currList.length);
       print(newList.length);
       print("llll");
@@ -243,7 +246,7 @@ class _SearchResultsState extends State<SearchResults> {
                   ),
                 ),
                 SizedBox(height: 5),
-                Padding(
+                /* Padding(
                   padding: const EdgeInsets.only(left: 200),
                   child: SizedBox(
                     height: 30,
@@ -275,7 +278,7 @@ class _SearchResultsState extends State<SearchResults> {
                       ),
                     ),
                   ),
-                ),
+                ), */
                 SizedBox(height: 10),
                 widget.uniList == null
                     ? Loading()

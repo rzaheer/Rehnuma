@@ -55,6 +55,7 @@ class _StudentRegisterState extends State<StudentRegister> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: primaryColor,
       body: SingleChildScrollView(
         child: Form(
           key: _formKey,

@@ -50,6 +50,9 @@ dependencies:
   filter_list: ^0.0.7
   email_auth: ^0.0.1+2
   provider: ^4.3.3
+  flutter_webview_plugin: ^0.3.11
+  dio: ^3.0.10
+  flutter_launcher_icons: ^0.8.1
 
 
 
@@ -79,6 +82,11 @@ flutter:
   assets:
   - assets/fonts/
   - assets/images/
+
+flutter_icons:
+    android: true
+    ios: true
+    image_path: "assets/images/logo.png"
 
   # To add assets to your application, add an assets section, like this:
   # assets:
