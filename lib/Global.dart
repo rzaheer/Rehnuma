@@ -22,3 +22,4 @@ const baseUrl = "https://uni-recommender.herokuapp.com/result";
 const baseUrlAllUni =
     "https://get-universities.herokuapp.com/getAllUniversities";
 //Color(0xFF#56E3E8),
+const secretKey="sk_test_51JcvAkF9Ya0QnJFLOjIQaHIX0waWZjGEijqvqlTBfOKzx040wZjFBEdHoQ08bLWhz9tYBmB8eHlLAxsfEAqBDEmm00N7D7uJDV";

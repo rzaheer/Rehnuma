@@ -5,12 +5,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finalyearproject/CustomWidgets/Custombottombar.dart';
 import 'package:finalyearproject/CustomWidgets/Loading.dart';
 import 'package:finalyearproject/Global.dart';
+import 'package:finalyearproject/Screens/PaymentWebview.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Home/DoctorDetails.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Home/DoctorsList.dart';
 import 'package:finalyearproject/Screens/Student/Homepage/Home/DrawerItems/Notifications.dart';
 import 'package:finalyearproject/models/mentorModel.dart';
 
 import 'package:finalyearproject/services/DBservice.dart';
+import 'package:finalyearproject/services/PaymentServices.dart';
 import 'package:finalyearproject/services/StudentProvider.dart';
 import 'package:finalyearproject/services/auth.dart';
 import 'package:finalyearproject/services/sharedFunctions.dart';
@@ -210,16 +212,9 @@ class _StudentHomeState extends State<StudentHome> {
                 shrinkWrap: true,
                 scrollDirection: Axis.vertical,
                 children: [
-                  /* RaisedButton(
-                    onPressed: () async {
-                    var p =
-                        Provider.of<StudentProvider>(context, listen: false);
-                    if (p.currStudent == null) {
-                      print("Its null");
-                    } else {
-                      print("not null");
-                    }
-                  }), */
+                  // RaisedButton(onPressed: () async {
+
+                  // }),
                   Text(
                     "Get the best career suggestions with our experts' guidance!",
                     maxLines: 2,
