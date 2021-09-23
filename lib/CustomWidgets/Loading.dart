@@ -23,13 +23,8 @@ class Loading extends StatelessWidget {
             SizedBox(
               height: 12,
             ),
-            Text(
-              'Getting it ready for you..',
-              style: Theme.of(context)
-                  .textTheme
-                  .subtitle2
-                  .copyWith(color: Colors.black),
-            )
+            Text('Getting it ready for you..',
+                style: TextStyle(fontSize: 14, color: Colors.black))
           ],
         ),
       ),
